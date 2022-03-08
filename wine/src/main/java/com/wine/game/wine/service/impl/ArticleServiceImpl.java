@@ -67,8 +67,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
         return new PageUtils(page);
     }
 
-   public List<ComComEntity> getListComCom(List<ComComEntity> comComEntityList){
-       List<ComComEntity> list=new ArrayList<>();
+   public void getListComCom(List<ComComEntity> comComEntityList){
+//       List<ComComEntity> =new ArrayList<>();
 
         for (ComComEntity co:comComEntityList){
             List<ComComEntity> id = comComService.list(new QueryWrapper<ComComEntity>().eq("com_id_two", co.getId()));
@@ -76,8 +76,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             if (id.size()>0){
                 getListComCom(id);
             }
-            list.addAll(id);
+//            list.addAll(id);
         }
-        return list;
+//        return list;
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wine.game.ware.dao.UserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.wine.game.ware.entity.UserEntity" id="userMap">
+        <result property="id" column="id"/>
+        <result property="openId" column="open_id"/>
+        <result property="userNikename" column="user_nikename"/>
+        <result property="userProtrait" column="user_protrait"/>
+        <result property="userSex" column="user_sex"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="userAddress" column="user_address"/>
+        <result property="lastIp" column="last_ip"/>
+        <result property="status" column="status"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+
+</mapper>

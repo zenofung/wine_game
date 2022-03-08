@@ -12,6 +12,8 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>wine</module>
+        <module>mall-common</module>
         <module>renren-fast</module>
         <module>renren-generator</module>
     </modules>

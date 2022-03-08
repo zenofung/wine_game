@@ -1,10 +1,13 @@
 package com.wine.game.wine.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -24,6 +27,10 @@ public class CommentEntity implements Serializable {
 	 */
 	@TableId
 	private Integer id;
+
+	private Integer artId;
+
+	private Integer userId;
 	/**
 	 * 
 	 */
@@ -40,5 +47,8 @@ public class CommentEntity implements Serializable {
 	 * 
 	 */
 	private Date createTime;
+
+	@TableField(exist = false)
+	private List<ComComEntity> comComEntityList;
 
 }

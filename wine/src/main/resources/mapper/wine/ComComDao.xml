@@ -7,7 +7,11 @@
     <resultMap type="com.wine.game.wine.entity.ComComEntity" id="comComMap">
         <result property="id" column="id"/>
         <result property="comId" column="com_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="userIdTwo" column="user_id_two"/>
         <result property="comIdTwo" column="com_id_two"/>
+        <result property="comContext" column="com_context"/>
         <result property="status" column="status"/>
         <result property="updateTime" column="update_time"/>
         <result property="createTime" column="create_time"/>

@@ -7,6 +7,7 @@
     <resultMap type="com.wine.game.wine.entity.ArticleEntity" id="articleMap">
         <result property="id" column="id"/>
         <result property="content" column="content"/>
+        <result property="userId" column="user_id"/>
         <result property="images" column="images"/>
         <result property="wineUrl" column="wine_url"/>
         <result property="praise" column="praise"/>

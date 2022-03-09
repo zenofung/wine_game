@@ -3,6 +3,7 @@ package com.wine.game.wine.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.wine.game.wine.entity.ComComEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wine.game.wine.entity.ArticleEntity;
-import com.wine.game.wine.service.ArticleService;
+import com.wine.game.wine.entity.ComComPraiseEntity;
+import com.wine.game.wine.service.ComComPraiseService;
 import com.zenofung.common.utils.PageUtils;
 import com.zenofung.common.utils.R;
 
@@ -22,21 +23,21 @@ import com.zenofung.common.utils.R;
  *
  * @author zenofung
  * @email zenofung@qq.com
- * @date 2022-03-08 11:46:32
+ * @date 2022-03-09 17:35:50
  */
 @RestController
-@RequestMapping("wine/article")
-public class ArticleController {
+@RequestMapping("wine/comcompraise")
+public class ComComPraiseController {
     @Autowired
-    private ArticleService articleService;
+    private ComComPraiseService comComPraiseService;
 
     /**
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("wine:article:list")
+    //@RequiresPermissions("wine:comcompraise:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = articleService.queryPage(params);
+        PageUtils page = comComPraiseService.queryPage(params);
 
         return R.ok().put("page", page);
     }
@@ -46,19 +47,20 @@ public class ArticleController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("wine:article:info")
+    //@RequiresPermissions("wine:comcompraise:info")
     public R info(@PathVariable("id") Integer id){
-		ArticleEntity article = articleService.getByIdAndContent(id);
-        return R.ok().put("article", article);
+		ComComPraiseEntity comComPraise = comComPraiseService.getById(id);
+
+        return R.ok().put("comComPraise", comComPraise);
     }
 
     /**
      * 保存
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("wine:article:save")
-    public R save(@RequestBody ArticleEntity article){
-		articleService.save(article);
+    //@RequiresPermissions("wine:comcompraise:save")
+    public R save(@RequestBody ComComPraiseEntity comComPraise){
+		comComPraiseService.save(comComPraise);
 
         return R.ok();
     }
@@ -67,9 +69,9 @@ public class ArticleController {
      * 修改
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("wine:article:update")
-    public R update(@RequestBody ArticleEntity article){
-		articleService.updateById(article);
+    //@RequiresPermissions("wine:comcompraise:update")
+    public R update(@RequestBody ComComPraiseEntity comComPraise){
+		comComPraiseService.updateById(comComPraise);
 
         return R.ok();
     }
@@ -78,11 +80,12 @@ public class ArticleController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("${moduleNamez}:article:delete")
-    public R delete(@RequestBody Integer[] ids){
-		articleService.removeByIds(Arrays.asList(ids));
-
+    //@RequiresPermissions("${moduleNamez}:comcompraise:delete")
+    public R delete(@RequestBody ComComPraiseEntity comComPraiseEntity){
+		comComPraiseService.removeByUserId(comComPraiseEntity);
         return R.ok();
     }
+
+
 
 }

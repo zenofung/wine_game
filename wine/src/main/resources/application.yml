@@ -91,3 +91,7 @@ mybatis-plus:
 #  notify_url: http://sthwsr.natappfree.cc/payed/notify
 #  return_url: http://member.glmall.com/memberOrder.html
 #  timeout: 15m
+
+image:
+  targetPath: /mydata/nginx/html/images/
+  imageUrl: http://120.26.163.91/images/

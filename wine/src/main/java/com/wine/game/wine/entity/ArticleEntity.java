@@ -67,4 +67,10 @@ public class ArticleEntity implements Serializable {
 	@TableField(exist = false)
 	private List<ComComEntity> comComEntityList;
 
+	@TableField(exist = false)
+	private Integer praises;
+
+	@TableField(exist = false)
+	private boolean praiseStatus;
+
 }

@@ -16,5 +16,7 @@ import java.util.Map;
 public interface WineService extends IService<WineEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    PageUtils queryPage(Map<String, Object> params, Integer id);
 }
 

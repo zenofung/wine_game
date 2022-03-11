@@ -6,62 +6,42 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-
 import lombok.Data;
 
 /**
- * 
+ * 标签关联文章
  * 
  * @author zenofung
  * @email zenofung@qq.com
- * @date 2022-03-08 11:46:32
+ * @date 2022-03-11 16:57:36
  */
 @Data
-@TableName("w_comment")
-public class CommentEntity implements Serializable {
+@TableName("w_article_label")
+public class ArticleLabelEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-
 	/**
-	 *
+	 * 
 	 */
 	@TableId
 	private Integer id;
 	/**
-	 *
+	 * 
 	 */
-	private Integer userId;
+	private Integer labelId;
 	/**
-	 *
+	 * 
 	 */
-	private Integer artId;
+	private Integer articleId;
 	/**
-	 *
-	 */
-	private String content;
-	/**
-	 *
-	 */
-	private Integer praise;
-	/**
-	 *
-	 */
-	private Integer status;
-	/**
-	 *
+	 * 
 	 */
 	private Date createTime;
 
+	/**
+	 * 查询标签
+	 */
 	@TableField(exist = false)
-	private List<ComComEntity> comComEntityList;
-
-
-	@TableField(exist = false)
-	private Integer praises;
-
-	@TableField(exist = false)
-	private boolean praiseStatus;
-
+	private LabelEntity labelEntity;
 
 }

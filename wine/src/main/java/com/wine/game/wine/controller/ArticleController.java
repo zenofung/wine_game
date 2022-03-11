@@ -45,10 +45,10 @@ public class ArticleController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/info/{id}/{userId}")
     //@RequiresPermissions("wine:article:info")
-    public R info(@PathVariable("id") Integer id){
-		ArticleEntity article = articleService.getByIdAndContent(id);
+    public R info(@PathVariable("id") Integer id,@PathVariable("userId") Integer userId){
+		ArticleEntity article = articleService.getByIdAndContent(id,userId);
         return R.ok().put("article", article);
     }
 

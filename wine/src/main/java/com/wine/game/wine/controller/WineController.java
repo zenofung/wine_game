@@ -40,6 +40,16 @@ public class WineController {
 
         return R.ok().put("page", page);
     }
+    /**
+     * 列表
+     */
+    @RequestMapping("/list/{id}")
+    //@RequiresPermissions("wine:wine:list")
+    public R list(@RequestParam Map<String, Object> params,@PathVariable Integer id){
+        PageUtils page = wineService.queryPage(params,id);
+
+        return R.ok().put("page", page);
+    }
 
 
     /**

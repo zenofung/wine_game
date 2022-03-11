@@ -11,6 +11,7 @@ import com.zenofung.common.utils.Query;
 import com.wine.game.wine.dao.WineDao;
 import com.wine.game.wine.entity.WineEntity;
 import com.wine.game.wine.service.WineService;
+import org.springframework.util.StringUtils;
 
 
 @Service("wineService")
@@ -24,6 +25,19 @@ public class WineServiceImpl extends ServiceImpl<WineDao, WineEntity> implements
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils queryPage(Map<String, Object> params, Integer id) {
+        QueryWrapper<WineEntity> wineEntityQueryWrapper = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(id)){
+            wineEntityQueryWrapper.eq("id",id);
+        }
+        IPage<WineEntity> page = this.page(new Query<WineEntity>().getPage(params),
+                wineEntityQueryWrapper);
+        return new PageUtils(page);
+
+
     }
 
 }

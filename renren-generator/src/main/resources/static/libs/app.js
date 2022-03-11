@@ -721,8 +721,8 @@ function _init() {
   'use strict';
 
   $.fn.todolist = function (options) {
-    // Render options
     var settings = $.extend({
+      // Render options
       //When the user checks the input
       onCheck: function (ele) {
         return ele;

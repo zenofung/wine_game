@@ -9,7 +9,8 @@
         <result property="content" column="content"/>
         <result property="userId" column="user_id"/>
         <result property="images" column="images"/>
-        <result property="wineUrl" column="wine_url"/>
+        <result property="wineId" column="wine_id"/>
+        <result property="articleAddress" column="article_address"/>
         <result property="praise" column="praise"/>
         <result property="status" column="status"/>
         <result property="updateTime" column="update_time"/>

@@ -10,7 +10,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://120.26.163.91:3306/wine?serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://120.26.163.91:3306/wine?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     cache: false

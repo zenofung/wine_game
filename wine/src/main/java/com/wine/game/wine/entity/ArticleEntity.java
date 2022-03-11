@@ -40,7 +40,7 @@ public class ArticleEntity implements Serializable {
 	/**
 	 * 
 	 */
-	private String wineUrl;
+	private String wineId;
 	/**
 	 * 
 	 */
@@ -72,5 +72,27 @@ public class ArticleEntity implements Serializable {
 
 	@TableField(exist = false)
 	private boolean praiseStatus;
+
+	/**
+	 *关注状态
+	 */
+	@TableField(exist = false)
+	private boolean attentionStatus;
+	/**
+	 * 标签列表
+	 */
+	@TableField(exist = false)
+	private List<ArticleLabelEntity> labelEntities;
+	/**
+	 * 酒局
+	 */
+	@TableField(exist = false)
+	private WineEntity wineEntity;
+	/**
+	 * 位置
+	 */
+	private String articleAddress;
+
+
 
 }

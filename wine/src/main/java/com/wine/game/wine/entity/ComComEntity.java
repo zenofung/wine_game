@@ -77,4 +77,12 @@ public class ComComEntity implements Serializable {
 	@TableField(exist = false)
 	private UserEntity userEntityTwo;
 
+
+	@TableField(exist = false)
+	private Integer praises;
+
+	@TableField(exist = false)
+	private boolean praiseStatus;
+
+
 }

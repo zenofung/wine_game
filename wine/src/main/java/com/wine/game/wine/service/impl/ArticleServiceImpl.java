@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -53,6 +54,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        if (StringUtils.isEmpty(params.get("user_id"))){
+            new TimeoutException("没有用户id");
+        }
         IPage<ArticleEntity> page = this.page(
                 new Query<ArticleEntity>().getPage(params),
                 new QueryWrapper<ArticleEntity>()
@@ -69,6 +73,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             m.setPraiseStatus(articleId2.size() > 0 ? true : false);
             //TODO 获取是否关注
             // attentionService
+            List<AttentionEntity> list1 = attentionService.list(new QueryWrapper<AttentionEntity>().eq("me_id", params.get("user_id")).eq("follower_id",m.getUserId()));
+            m.setAttentionStatus(list1.size() > 0 ? true:false);
 
 
             //标签

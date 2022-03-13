@@ -1,5 +1,7 @@
 package com.wine.game.wine.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -44,5 +46,8 @@ public class AttentionEntity implements Serializable {
 	 * 
 	 */
 	private Date updateTime;
+
+	@TableField(exist = false)
+	private UserEntity userEntity;
 
 }

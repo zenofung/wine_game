@@ -27,7 +27,7 @@ public class CommentPraiseEntity implements Serializable {
 	/**
 	 * 
 	 */
-	private Integer userId;
+	private String userId;
 	/**
 	 * 
 	 */

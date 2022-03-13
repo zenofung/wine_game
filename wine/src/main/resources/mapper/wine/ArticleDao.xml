@@ -16,6 +16,10 @@
         <result property="updateTime" column="update_time"/>
         <result property="createTime" column="create_time"/>
     </resultMap>
+    <select id="findByAttentionID" resultType="com.wine.game.wine.entity.ArticleEntity">
+       SELECT war.* from w_attention as watt left join w_article as war on watt.follower_id=war.user_id
+      WHERE watt.me_id=#{userId} and war.id is not NULL
+    </select>
 
 
 </mapper>

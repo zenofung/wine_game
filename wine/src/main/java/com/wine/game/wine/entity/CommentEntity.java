@@ -31,11 +31,11 @@ public class CommentEntity implements Serializable {
 	/**
 	 *
 	 */
-	private Integer userId;
+	private String userId;
 	/**
 	 *
 	 */
-	private Integer artId;
+	private String artId;
 	/**
 	 *
 	 */

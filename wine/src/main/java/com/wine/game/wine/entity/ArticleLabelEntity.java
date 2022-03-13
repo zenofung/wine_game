@@ -32,7 +32,7 @@ public class ArticleLabelEntity implements Serializable {
 	/**
 	 * 
 	 */
-	private Integer articleId;
+	private String articleId;
 	/**
 	 * 
 	 */

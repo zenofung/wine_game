@@ -29,11 +29,11 @@ public class AttentionEntity implements Serializable {
 	/**
 	 * 
 	 */
-	private Integer meId;
+	private String meId;
 	/**
 	 * 
 	 */
-	private Integer followerId;
+	private String followerId;
 	/**
 	 * 
 	 */

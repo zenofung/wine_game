@@ -45,7 +45,7 @@ public class WineController {
      */
     @RequestMapping("/list/{id}")
     //@RequiresPermissions("wine:wine:list")
-    public R list(@RequestParam Map<String, Object> params,@PathVariable Integer id){
+    public R list(@RequestParam Map<String, Object> params,@PathVariable String id){
         PageUtils page = wineService.queryPage(params,id);
 
         return R.ok().put("page", page);
@@ -57,7 +57,7 @@ public class WineController {
      */
     @RequestMapping("/info/{id}")
     //@RequiresPermissions("wine:wine:info")
-    public R info(@PathVariable("id") Integer id){
+    public R info(@PathVariable("id") String id){
 		WineEntity wine = wineService.getById(id);
 
         return R.ok().put("wine", wine);
@@ -90,7 +90,7 @@ public class WineController {
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("${moduleNamez}:wine:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public R delete(@RequestBody String[] ids){
 		wineService.removeByIds(Arrays.asList(ids));
 
         return R.ok();

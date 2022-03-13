@@ -18,7 +18,7 @@ public interface ArticleLabelService extends IService<ArticleLabelEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    List<ArticleLabelEntity> listByArticleId(Integer articleId);
+    List<ArticleLabelEntity> listByArticleId(String articleId);
 
 }
 

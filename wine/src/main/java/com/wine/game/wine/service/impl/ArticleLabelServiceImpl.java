@@ -35,7 +35,7 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelDao, Articl
     }
 
     @Override
-    public List<ArticleLabelEntity> listByArticleId(Integer articleId) {
+    public List<ArticleLabelEntity> listByArticleId(String articleId) {
         List<ArticleLabelEntity> article_id = this.list(new QueryWrapper<ArticleLabelEntity>().eq("article_id", articleId));
         article_id.stream().forEach(m->{
             m.setLabelEntity(labelService.getById(m.getLabelId()));

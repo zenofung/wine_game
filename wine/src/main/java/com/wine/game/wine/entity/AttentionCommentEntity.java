@@ -27,7 +27,7 @@ public class AttentionCommentEntity implements Serializable {
 	/**
 	 * 
 	 */
-	private Integer articleId;
+	private String articleId;
 	/**
 	 * 
 	 */

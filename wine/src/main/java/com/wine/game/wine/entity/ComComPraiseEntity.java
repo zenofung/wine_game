@@ -27,7 +27,7 @@ public class ComComPraiseEntity implements Serializable {
 	/**
 	 * 
 	 */
-	private Integer userId;
+	private String userId;
 	/**
 	 * 
 	 */

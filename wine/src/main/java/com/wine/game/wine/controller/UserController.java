@@ -3,7 +3,7 @@ package com.wine.game.wine.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-import me.chanjar.weixin.common.bean.WxAccessToken;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,6 +60,8 @@ public class UserController {
     @RequestMapping("/save")
     //@RequiresPermissions("wine:user:save")
     public R save(@RequestBody UserEntity user){
+        // wxMaUserServiceImpl.getUserInfo();
+
 		userService.save(user);
 
         return R.ok();

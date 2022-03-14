@@ -20,7 +20,13 @@ spring:
     store-type: redis
   redis:
     host: 120.26.163.91
-    password: 123456
+    password:
+    jedis:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5       # 连接池中的最小空闲连接
   cloud:
     alicloud:
       access-key: LTAI4FnPLQQ1sDJqMJbcn9Nq
@@ -98,3 +104,21 @@ mybatis-plus:
 image:
   targetPath: /mydata/nginx/html/images/
   imageUrl: http://120.26.163.91/images/
+wx:
+  miniapp:
+    appid: wx1665a2834d959989
+    secret: 3ac50cbfd17e19046d352ea560c6bd14
+    token:
+    aes-key:
+    msg-data-format: XML
+    config-storage:
+      type: redistemplate
+      redis:
+        host: 120.26.163.91
+        password:
+        port: 6379
+      http-client-type: httpclient
+      http-proxy-host:
+      http-proxy-port:
+      http-proxy-password:
+      http-proxy-username:

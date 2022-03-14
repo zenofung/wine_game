@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -53,10 +54,23 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<ArticleEntity> page = this.page(
-                new Query<ArticleEntity>().getPage(params),
-                new QueryWrapper<ArticleEntity>()
-        );
+        if (StringUtils.isEmpty(params.get("user_id"))){
+            new TimeoutException("没有用户id");
+        }
+        IPage<ArticleEntity> page = null;
+        if (StringUtils.isEmpty(params.get("attention"))){
+            page = this.page(
+                    new Query<ArticleEntity>().getPage(params),
+                    new QueryWrapper<ArticleEntity>()
+            );
+        }else {
+           page= articleDao.findByAttentionID(new Query<ArticleEntity>().getPage(params),params.get("user_id").toString());
+        }
+        getPageArticle(params, page);
+        return new PageUtils(page);
+    }
+
+    private void getPageArticle(Map<String, Object> params, IPage<ArticleEntity> page) {
         page.getRecords().stream().forEach(m -> {
             QueryWrapper<CommentEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("art_id", m.getId());
@@ -67,21 +81,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             m.setPraises(articleId.size());
             List<ArticlePraiseEntity> articleId2 = articlePraiseService.list(new QueryWrapper<ArticlePraiseEntity>().eq("article_id", m.getId()).eq("user_id", params.get("user_id")));
             m.setPraiseStatus(articleId2.size() > 0 ? true : false);
-            //TODO 获取是否关注
+            // 获取是否关注
             // attentionService
-
-
+            List<AttentionEntity> list1 = attentionService.list(new QueryWrapper<AttentionEntity>().eq("me_id", params.get("user_id")).eq("follower_id",m.getUserId()));
+            m.setAttentionStatus(list1.size() > 0 ? true:false);
             //标签
             m.setLabelEntities(articleLabelService.listByArticleId(m.getId()));
             //获取酒局
             m.setWineEntity(wineService.getById(m.getWineId()));
 
         });
-        return new PageUtils(page);
     }
 
     @Override
-    public ArticleEntity getByIdAndContent(Integer id, Integer userId) {
+    public ArticleEntity getByIdAndContent(String id, String userId) {
         ArticleEntity articleEntity = articleDao.selectById(id);
         UserEntity byId = userService.getById(articleEntity.getUserId());
         articleEntity.setUserEntity(byId);
@@ -114,7 +127,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
         return articleEntity;
     }
 
-    public void getListComCom(List<ComComEntity> comComEntityList, Integer userId) {
+    public void getListComCom(List<ComComEntity> comComEntityList, String userId) {
 //       List<ComComEntity> =new ArrayList<>();
 
         for (ComComEntity co : comComEntityList) {

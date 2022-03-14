@@ -47,7 +47,7 @@ public class ArticleLabelController {
      */
     @RequestMapping("/list/{articleId}")
     //@RequiresPermissions("wine:articlepraise:list")
-    public R list(@PathVariable Integer articleId){
+    public R list(@PathVariable String articleId){
         List<ArticleLabelEntity> articleId1 = articleLabelService.listByArticleId(articleId);
         return R.ok().put("art",articleId1);
     }

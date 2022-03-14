@@ -47,7 +47,7 @@ public class ArticleController {
      */
     @RequestMapping("/info/{id}/{userId}")
     //@RequiresPermissions("wine:article:info")
-    public R info(@PathVariable("id") Integer id,@PathVariable("userId") Integer userId){
+    public R info(@PathVariable("id") String id,@PathVariable("userId") String userId){
 		ArticleEntity article = articleService.getByIdAndContent(id,userId);
         return R.ok().put("article", article);
     }
@@ -79,7 +79,7 @@ public class ArticleController {
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("${moduleNamez}:article:delete")
-    public R delete(@RequestBody Integer[] ids){
+    public R delete(@RequestBody String[] ids){
 		articleService.removeByIds(Arrays.asList(ids));
 
         return R.ok();

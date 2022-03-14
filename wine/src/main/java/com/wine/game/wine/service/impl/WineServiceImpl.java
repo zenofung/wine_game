@@ -28,7 +28,7 @@ public class WineServiceImpl extends ServiceImpl<WineDao, WineEntity> implements
     }
 
     @Override
-    public PageUtils queryPage(Map<String, Object> params, Integer id) {
+    public PageUtils queryPage(Map<String, Object> params, String id) {
         QueryWrapper<WineEntity> wineEntityQueryWrapper = new QueryWrapper<>();
         if (!StringUtils.isEmpty(id)){
             wineEntityQueryWrapper.eq("id",id);

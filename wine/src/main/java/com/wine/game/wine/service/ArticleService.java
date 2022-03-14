@@ -17,6 +17,6 @@ public interface ArticleService extends IService<ArticleEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    ArticleEntity getByIdAndContent(Integer id,Integer userId);
+    ArticleEntity getByIdAndContent(String id,String userId);
 }
 

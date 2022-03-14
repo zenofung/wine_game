@@ -35,16 +35,16 @@ public class ComComEntity implements Serializable {
 	/**
 	 *
 	 */
-	private Integer userId;
+	private String  userId;
 
 	/**
 	 *
 	 */
-	private Integer userIdTwo;
+	private String userIdTwo;
 	/**
 	 *
 	 */
-	private Integer comIdTwo;
+	private String comIdTwo;
 	/**
 	 *
 	 */

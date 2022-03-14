@@ -63,6 +63,11 @@
             <version>${javax.servlet.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>4.2.0</version>
+        </dependency>
 <!--        &lt;!&ndash; 服务注册与发现 &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>com.alibaba.cloud</groupId>-->

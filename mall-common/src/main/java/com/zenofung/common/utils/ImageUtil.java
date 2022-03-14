@@ -16,7 +16,7 @@ public class ImageUtil {
 
     public static String writeImage(byte[] imageBytes,String fileName,String targetPath,String imageUrl){
         String fileSuffix = fileName.substring(fileName.lastIndexOf('.'));
-        if(!fileSuffix.equals(".jpg") && !fileSuffix.equals(".jpeg") && !fileSuffix.equals(".png") && !fileSuffix.equals(".gif")&& !fileSuffix.equals(".mp4")){
+        if(!fileSuffix.equals(".mp3") && !fileSuffix.equals(".jpg") && !fileSuffix.equals(".jpeg") && !fileSuffix.equals(".png") && !fileSuffix.equals(".gif")&& !fileSuffix.equals(".mp4")){
             throw new RuntimeException("请上传图片或视频");
         }
         String s = IdUtil.fastUUID();

@@ -1,6 +1,6 @@
 package com.wine.game.wine.dao;
 
-import com.wine.game.wine.entity.WineEntity;
+import com.wine.game.wine.entity.WineUsersEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,6 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-03-17 17:20:49
  */
 @Mapper
-public interface WineDao extends BaseMapper<WineEntity> {
+public interface WineUsersDao extends BaseMapper<WineUsersEntity> {
 	
 }

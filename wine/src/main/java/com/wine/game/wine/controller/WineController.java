@@ -71,7 +71,7 @@ public class WineController {
     public R save(@RequestBody WineEntity wine){
 		wineService.save(wine);
 
-        return R.ok();
+        return R.ok().put("wine",wine);
     }
 
     /**

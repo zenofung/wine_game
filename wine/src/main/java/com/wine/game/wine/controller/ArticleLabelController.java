@@ -72,7 +72,7 @@ public class ArticleLabelController {
     public R save(@RequestBody ArticleLabelEntity articleLabel){
 		articleLabelService.save(articleLabel);
 
-        return R.ok();
+        return R.ok().put("articleLabel",articleLabel);
     }
 
     /**

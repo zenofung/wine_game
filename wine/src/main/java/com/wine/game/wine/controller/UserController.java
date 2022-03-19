@@ -66,7 +66,7 @@ public class UserController {
 
 		userService.save(user);
 
-        return R.ok();
+        return R.ok().put("user",user);
     }
 
     /**

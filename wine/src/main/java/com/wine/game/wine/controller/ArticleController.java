@@ -60,7 +60,7 @@ public class ArticleController {
     public R save(@RequestBody ArticleEntity article){
 		articleService.save(article);
 
-        return R.ok();
+        return R.ok().put("article",article);
     }
 
     /**

@@ -9,8 +9,8 @@ spring:
     name: wine
   datasource:
     username: root
-    password: 123456
-    url: jdbc:mysql://120.26.163.91:3306/wine?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    password: zenofung
+    url: jdbc:mysql://121.40.90.22:3306/wine?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     cache: false
@@ -19,8 +19,8 @@ spring:
   session:
     store-type: redis
   redis:
-    host: 120.26.163.91
-    password:
+    host: 121.40.90.22
+    password: zenofung
     jedis:
       pool:
         max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
@@ -102,8 +102,8 @@ mybatis-plus:
 #  timeout: 15m
 
 image:
-  targetPath: /mydata/nginx/html/images/
-  imageUrl: http://120.26.163.91/images/
+  targetPath: /home/html/miniImage/
+  imageUrl: http://121.40.90.22/static/miniImage/
 wx:
   miniapp:
     appid: wx1665a2834d959989
@@ -114,8 +114,8 @@ wx:
     config-storage:
       type: redistemplate
       redis:
-        host: 120.26.163.91
-        password:
+        host: 121.40.90.22
+        password: zenofung
         port: 6379
       http-client-type: httpclient
       http-proxy-host:

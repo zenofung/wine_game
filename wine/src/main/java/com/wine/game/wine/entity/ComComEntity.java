@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.wine.game.wine.vo.UserVo;
 import lombok.Data;
 
 /**
@@ -84,5 +85,11 @@ public class ComComEntity implements Serializable {
 	@TableField(exist = false)
 	private boolean praiseStatus;
 
+
+	@TableField(exist = false)
+	private UserVo userVo;
+
+	@TableField(exist = false)
+	private UserVo twoUserVo;
 
 }

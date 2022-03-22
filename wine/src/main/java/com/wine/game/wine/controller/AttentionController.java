@@ -1,8 +1,10 @@
 package com.wine.game.wine.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,7 +63,7 @@ public class AttentionController {
     public R save(@RequestBody AttentionEntity attention){
 		attentionService.save(attention);
 
-        return R.ok();
+        return R.ok().put("attention",attention);
     }
 
     /**
@@ -80,8 +82,23 @@ public class AttentionController {
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("${moduleNamez}:attention:delete")
-    public R delete(@RequestBody Integer[] ids){
-		attentionService.removeByIds(Arrays.asList(ids));
+    public R delete(@RequestBody AttentionEntity attention){
+//		attentionService.removeByIds(Arrays.asList(ids));
+        QueryWrapper<AttentionEntity> eq = new QueryWrapper<AttentionEntity>().eq("me_id", attention.getMeId()).eq("follower_id", attention.getFollowerId());
+        List<AttentionEntity> list = attentionService.list(eq);
+        list.stream().forEach(m->{
+            attentionService.removeById(m);
+        });
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete2")
+    //@RequiresPermissions("${moduleNamez}:attention:delete")
+    public R delete2(@RequestBody Integer[] ids){
+        attentionService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

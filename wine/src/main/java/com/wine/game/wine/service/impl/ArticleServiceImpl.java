@@ -2,6 +2,8 @@ package com.wine.game.wine.service.impl;
 
 import com.wine.game.wine.entity.*;
 import com.wine.game.wine.service.*;
+import com.wine.game.wine.vo.UserVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -76,7 +78,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             queryWrapper.eq("art_id", m.getId());
             List<CommentEntity> list = commentService.list(queryWrapper);
             m.setCommentEntity(list);
-            m.setUserEntity(userService.getById(m.getUserId()));
+            UserEntity byId = userService.getById(m.getUserId());
+            UserVo userVo=new UserVo();
+            BeanUtils.copyProperties(byId,userVo);
+            m.setUserVo(userVo);
+
             List<ArticlePraiseEntity> articleId = articlePraiseService.list(new QueryWrapper<ArticlePraiseEntity>().eq("article_id", m.getId()));
             m.setPraises(articleId.size());
             List<ArticlePraiseEntity> articleId2 = articlePraiseService.list(new QueryWrapper<ArticlePraiseEntity>().eq("article_id", m.getId()).eq("user_id", params.get("user_id")));
@@ -84,7 +90,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             // 获取是否关注
             // attentionService
             List<AttentionEntity> list1 = attentionService.list(new QueryWrapper<AttentionEntity>().eq("me_id", params.get("user_id")).eq("follower_id",m.getUserId()));
-            m.setAttentionStatus(list1.size() > 0 ? true:false);
+            boolean flag= list1.size() > 0 ? true:false;
+            m.setAttentionStatus(flag);
             //标签
             m.setLabelEntities(articleLabelService.listByArticleId(m.getId()));
             //获取酒局
@@ -96,12 +103,31 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
     @Override
     public ArticleEntity getByIdAndContent(String id, String userId) {
         ArticleEntity articleEntity = articleDao.selectById(id);
+        if (StringUtils.isEmpty(articleEntity)){
+            throw new RuntimeException("没有文章");
+        }
         UserEntity byId = userService.getById(articleEntity.getUserId());
-        articleEntity.setUserEntity(byId);
+        UserVo userVo=new UserVo();
+        BeanUtils.copyProperties(byId,userVo);
+        articleEntity.setUserVo(userVo);
+
         List<CommentPraiseEntity> commentPraiseEntities = commentPraiseService.list(new QueryWrapper<CommentPraiseEntity>().eq("comment_id", articleEntity.getId()));
         articleEntity.setPraises(commentPraiseEntities.size());
         List<CommentPraiseEntity> commentPraiseEntities1 = commentPraiseService.list(new QueryWrapper<CommentPraiseEntity>().eq("comment_id", articleEntity.getId()).eq("user_id", userId));
         articleEntity.setPraiseStatus(commentPraiseEntities1.size() > 0 ? true : false);
+        // 获取是否关注
+        // attentionService
+        List<AttentionEntity> entityList = attentionService.list(new QueryWrapper<AttentionEntity>().eq("me_id", userId).eq("follower_id",id));
+        boolean flag= entityList.size() > 0 ? true:false;
+        articleEntity.setAttentionStatus(flag);
+        //标签
+        articleEntity.setLabelEntities(articleLabelService.listByArticleId(articleEntity.getId()));
+        //获取酒局
+        articleEntity.setWineEntity(wineService.getById(articleEntity.getWineId()));
+
+        //获取用用户信息
+
+
         //查询二级评价
         QueryWrapper<CommentEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("art_id", articleEntity.getId());
@@ -110,9 +136,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             //查询二级评价
             QueryWrapper<ComComEntity> comId = new QueryWrapper<ComComEntity>().eq("com_id", f.getId());
             List<ComComEntity> list1 = comComService.list(comId);
-            f.setComComEntityList(list1);
+
+            //设置用户信息
+            UserEntity byId1 = userService.getById(f.getUserId());
+            UserVo userVo2=new UserVo();
+            BeanUtils.copyProperties(byId,userVo2);
+            f.setUserVo(userVo2);
             //查找多级评论
             list1.stream().forEach(t -> {
+                UserEntity userEntity = userService.getById(t.getUserId());
+                UserVo userVo3=new UserVo();
+                BeanUtils.copyProperties(userEntity,userVo3);
+                t.setUserVo(userVo3);
+                UserEntity byId2 = userService.getById(t.getUserIdTwo());
+                UserVo userVo4=new UserVo();
+                BeanUtils.copyProperties(byId2,userVo4);
+                t.setTwoUserVo(userVo4);
                 QueryWrapper<ComComEntity> comId2 = new QueryWrapper<ComComEntity>().eq("com_id_two", t.getId());
                 List<ComComEntity> list3 = comComService.list(comId2);
                 if (list3.size() > 0) {
@@ -120,8 +159,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
                 }
                 t.setComComEntityList(list3);
             });
-
-
+            f.setComComEntityList(list1);
         });
         articleEntity.setCommentEntity(list);
         return articleEntity;
@@ -133,9 +171,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
         for (ComComEntity co : comComEntityList) {
             List<ComComEntity> id = comComService.list(new QueryWrapper<ComComEntity>().eq("com_id_two", co.getId()));
             UserEntity byId = userService.getById(co.getUserId());
-            co.setUserEntity(byId);
+            UserVo userVo2=new UserVo();
+            BeanUtils.copyProperties(byId,userVo2);
+            co.setUserVo(userVo2);
+//            co.setUserEntity(byId);
             UserEntity byId2 = userService.getById(co.getUserIdTwo());
-            co.setUserEntityTwo(byId2);
+//            co.setUserEntityTwo(byId2);
+            UserVo userVo3=new UserVo();
+            BeanUtils.copyProperties(byId2,userVo3);
+            co.setUserVo(userVo2);
+
             co.setComComEntityList(id);
             List<ComComPraiseEntity> commentPraiseEntities = comComPraiseService.list(new QueryWrapper<ComComPraiseEntity>().eq("com_com_id", co.getId()));
             co.setPraises(commentPraiseEntities.size());

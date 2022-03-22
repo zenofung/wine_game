@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.wine.game.wine.vo.UserVo;
 import lombok.Data;
 
 /**
@@ -29,33 +30,33 @@ public class ArticleEntity implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
 	private String id;
 	/**
-	 * 
+	 *
 	 */
 	private String content;
 	/**
-	 * 
+	 *
 	 */
 	private String images;
 
 	private String userId;
 	/**
-	 * 
+	 *
 	 */
 	private String wineId;
 	/**
-	 * 
+	 *
 	 */
 	private Integer praise;
 	/**
-	 * 
+	 *
 	 */
 	private Integer status;
 	/**
-	 * 
+	 *
 	 */
 	private Date updateTime;
 	/**
-	 * 
+	 *
 	 */
 	private Date createTime;
 
@@ -63,7 +64,7 @@ public class ArticleEntity implements Serializable {
 	private List<CommentEntity> commentEntity;
 
 	@TableField(exist = false)
-	private UserEntity userEntity;
+	private UserVo userVo;
 
 	@TableField(exist = false)
 	private List<ComComEntity> comComEntityList;
@@ -73,6 +74,7 @@ public class ArticleEntity implements Serializable {
 
 	@TableField(exist = false)
 	private boolean praiseStatus;
+
 
 	/**
 	 *关注状态
@@ -94,6 +96,10 @@ public class ArticleEntity implements Serializable {
 	 */
 	private String articleAddress;
 
+	@TableField(exist = false)
+	private String nikeName;
 
+	@TableField(exist = false)
+	private String portrait;
 
 }

@@ -61,7 +61,13 @@ public class AttentionController {
     @RequestMapping("/save")
     //@RequiresPermissions("wine:attention:save")
     public R save(@RequestBody AttentionEntity attention){
-		attentionService.save(attention);
+        List<AttentionEntity> list = attentionService.list(new QueryWrapper<AttentionEntity>().eq("me_id", attention.getMeId())
+                .eq("follower_id", attention.getFollowerId()));
+        if (list.size()>0){
+            return R.ok().put("attention",list.get(0));
+        }
+
+        attentionService.save(attention);
 
         return R.ok().put("attention",attention);
     }

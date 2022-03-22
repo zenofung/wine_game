@@ -1,8 +1,10 @@
 package com.wine.game.wine.service.impl;
 
+import com.wine.game.wine.entity.LabelEntity;
 import com.wine.game.wine.service.LabelService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -41,6 +43,16 @@ public class ArticleLabelServiceImpl extends ServiceImpl<ArticleLabelDao, Articl
             m.setLabelEntity(labelService.getById(m.getLabelId()));
         });
         return article_id;
+    }
+
+    @Override
+    public List<LabelEntity> listByArticleName(String id) {
+        List<ArticleLabelEntity> article_id = this.list(new QueryWrapper<ArticleLabelEntity>().eq("article_id", id));
+        List list=new ArrayList();
+        article_id.stream().forEach(m->{
+            list.add(labelService.getById(m.getLabelId()));
+        });
+        return list;
     }
 
 }

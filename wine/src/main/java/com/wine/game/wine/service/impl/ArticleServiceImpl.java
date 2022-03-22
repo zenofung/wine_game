@@ -93,7 +93,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             boolean flag= list1.size() > 0 ? true:false;
             m.setAttentionStatus(flag);
             //标签
-            m.setLabelEntities(articleLabelService.listByArticleId(m.getId()));
+            m.setLabelEntities(articleLabelService.listByArticleName(m.getId()));
             //获取酒局
             m.setWineEntity(wineService.getById(m.getWineId()));
 
@@ -110,23 +110,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
         UserVo userVo=new UserVo();
         BeanUtils.copyProperties(byId,userVo);
         articleEntity.setUserVo(userVo);
-
-        List<CommentPraiseEntity> commentPraiseEntities = commentPraiseService.list(new QueryWrapper<CommentPraiseEntity>().eq("comment_id", articleEntity.getId()));
-        articleEntity.setPraises(commentPraiseEntities.size());
-        List<CommentPraiseEntity> commentPraiseEntities1 = commentPraiseService.list(new QueryWrapper<CommentPraiseEntity>().eq("comment_id", articleEntity.getId()).eq("user_id", userId));
-        articleEntity.setPraiseStatus(commentPraiseEntities1.size() > 0 ? true : false);
+        //点赞
+        List<ArticlePraiseEntity> articleId = articlePraiseService.list(new QueryWrapper<ArticlePraiseEntity>().eq("article_id",id));
+        articleEntity.setPraises(articleId.size());
+        List<ArticlePraiseEntity> articleId2 = articlePraiseService.list(new QueryWrapper<ArticlePraiseEntity>().eq("article_id",id).eq("user_id", userId));
+        articleEntity.setPraiseStatus(articleId2.size() > 0 ? true : false);
         // 获取是否关注
         // attentionService
-        List<AttentionEntity> entityList = attentionService.list(new QueryWrapper<AttentionEntity>().eq("me_id", userId).eq("follower_id",id));
+        List<AttentionEntity> entityList = attentionService.list(new QueryWrapper<AttentionEntity>().eq("me_id", userId).eq("follower_id",articleEntity.getUserId()));
         boolean flag= entityList.size() > 0 ? true:false;
         articleEntity.setAttentionStatus(flag);
         //标签
-        articleEntity.setLabelEntities(articleLabelService.listByArticleId(articleEntity.getId()));
+        articleEntity.setLabelEntities(articleLabelService.listByArticleName(articleEntity.getId()));
         //获取酒局
         articleEntity.setWineEntity(wineService.getById(articleEntity.getWineId()));
-
-        //获取用用户信息
-
 
         //查询二级评价
         QueryWrapper<CommentEntity> queryWrapper = new QueryWrapper<>();
@@ -140,7 +137,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             //设置用户信息
             UserEntity byId1 = userService.getById(f.getUserId());
             UserVo userVo2=new UserVo();
-            BeanUtils.copyProperties(byId,userVo2);
+            BeanUtils.copyProperties(byId1,userVo2);
             f.setUserVo(userVo2);
             //查找多级评论
             list1.stream().forEach(t -> {
@@ -159,7 +156,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
                 }
                 t.setComComEntityList(list3);
             });
+            //评论点赞
+
+            List<CommentPraiseEntity> commentPraiseEntities2 = commentPraiseService.list(new QueryWrapper<CommentPraiseEntity>().eq("comment_id",f.getId()));
+            f.setPraises(commentPraiseEntities2.size());
+            List<CommentPraiseEntity> commentPraiseEntities3 = commentPraiseService.list(new QueryWrapper<CommentPraiseEntity>().eq("comment_id", f.getId()).eq("user_id", userId));
+            f.setPraiseStatus(commentPraiseEntities3.size() > 0 ? true : false);
             f.setComComEntityList(list1);
+
         });
         articleEntity.setCommentEntity(list);
         return articleEntity;

@@ -85,7 +85,7 @@ public class ArticleEntity implements Serializable {
 	 * 标签列表
 	 */
 	@TableField(exist = false)
-	private List<ArticleLabelEntity> labelEntities;
+	private List<LabelEntity> labelEntities;
 	/**
 	 * 酒局
 	 */

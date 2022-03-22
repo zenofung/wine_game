@@ -1,6 +1,7 @@
 package com.wine.game.wine.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wine.game.wine.entity.LabelEntity;
 import com.zenofung.common.utils.PageUtils;
 import com.wine.game.wine.entity.ArticleLabelEntity;
 
@@ -20,5 +21,6 @@ public interface ArticleLabelService extends IService<ArticleLabelEntity> {
 
     List<ArticleLabelEntity> listByArticleId(String articleId);
 
+    List<LabelEntity> listByArticleName(String id);
 }
 

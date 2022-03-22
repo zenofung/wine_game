@@ -95,7 +95,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
             //标签
             m.setLabelEntities(articleLabelService.listByArticleName(m.getId()));
             //获取酒局
-            m.setWineEntity(wineService.getById(m.getWineId()));
+            m.setWineEntity(wineService.getByIdAll(m.getWineId()));
 
         });
     }
@@ -123,7 +123,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
         //标签
         articleEntity.setLabelEntities(articleLabelService.listByArticleName(articleEntity.getId()));
         //获取酒局
-        articleEntity.setWineEntity(wineService.getById(articleEntity.getWineId()));
+        articleEntity.setWineEntity(wineService.getByIdAll(articleEntity.getWineId()));
 
         //查询二级评价
         QueryWrapper<CommentEntity> queryWrapper = new QueryWrapper<>();

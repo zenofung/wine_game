@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.wine.game.wine.vo.UserVo;
 import lombok.Data;
 
 /**
@@ -92,7 +93,7 @@ public class WineEntity implements Serializable {
 	@TableField(exist = false)
 	private UserEntity userEntity;
 	@TableField(exist = false)
-	private List<WineUsersEntity> userEntityList;
+	private List<UserVo> userEntityList;
 	@TableField(exist = false)
 	private boolean wineUserStatus;
 

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.wine.game.wine.vo.UserVo;
 import lombok.Data;
 
 /**
@@ -43,6 +45,6 @@ public class WineUsersEntity implements Serializable {
 	private Date createTime;
 
 	@TableField(exist = false)
-	private UserEntity userEntity;
+	private UserVo userVo;
 
 }

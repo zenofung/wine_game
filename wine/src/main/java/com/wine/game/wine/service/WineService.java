@@ -18,5 +18,8 @@ public interface WineService extends IService<WineEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     PageUtils queryPage(Map<String, Object> params, String id);
+
+    WineEntity getByIdAll(String wineId);
+
 }
 

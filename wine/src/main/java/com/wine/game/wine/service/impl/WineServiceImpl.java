@@ -44,7 +44,7 @@ public class WineServiceImpl extends ServiceImpl<WineDao, WineEntity> implements
     private void getAllWine(Map<String, Object> params, IPage<WineEntity> page) {
         page.getRecords().stream().forEach(m->{
             m.setUserEntity(userService.getById(m.getUnId()));
-            m.setUserEntityList(wineUsersService.getListByWine(m.getId()));
+            m.setUserEntityList(wineUsersService.getListByUser(m.getId()));
             if (!StringUtils.isEmpty(params.get("userId"))){
                 WineUsersEntity wineUsersEntity =new WineUsersEntity();
                 wineUsersEntity.setUserId(params.get("userId").toString());
@@ -67,6 +67,16 @@ public class WineServiceImpl extends ServiceImpl<WineDao, WineEntity> implements
         return new PageUtils(page);
 
 
+    }
+
+    @Override
+    public WineEntity getByIdAll(String wineId) {
+        WineEntity byId = this.getById(wineId);
+        if (StringUtils.isEmpty(byId)){
+            return null;
+        }
+        byId.setUserEntityList(wineUsersService.getListByUser(wineId));
+        return byId;
     }
 
 }

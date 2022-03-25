@@ -1,6 +1,6 @@
 #ipAddr: 127.0.0.1
 server:
-  port: 9000
+  port: 8080
 spring:
 #    sentinel:
 #      transport:
@@ -103,7 +103,7 @@ mybatis-plus:
 
 image:
   targetPath: /mydata/nginx/html/static/miniImage/
-  imageUrl: http://121.40.90.22/static/miniImage/
+  imageUrl: https://www.homiesocial.cn/static/miniImage/
 wx:
   miniapp:
     appid: wx1665a2834d959989

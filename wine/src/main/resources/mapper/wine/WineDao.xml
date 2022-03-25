@@ -10,6 +10,7 @@
         <result property="subject" column="subject"/>
         <result property="time" column="time"/>
         <result property="place" column="place"/>
+        <result property="wineBarId" column="wine_bar_id"/>
         <result property="pepleNumber" column="peple_number"/>
         <result property="titleImage" column="title_image"/>
         <result property="objectBoy" column="object_boy"/>

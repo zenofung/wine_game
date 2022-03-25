@@ -1,9 +1,11 @@
 package com.wine.game.wine.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wine.game.wine.vo.UserVo;
 import com.zenofung.common.utils.PageUtils;
 import com.wine.game.wine.entity.WineEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,5 +23,6 @@ public interface WineService extends IService<WineEntity> {
 
     WineEntity getByIdAll(String wineId);
 
+    List<UserVo> getBarById(Integer id);
 }
 

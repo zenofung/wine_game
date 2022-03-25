@@ -50,6 +50,10 @@ public class WineEntity implements Serializable {
 	 */
 	private Integer pepleNumber;
 	/**
+	 * 人数
+	 */
+	private Integer wineBarId;
+	/**
 	 * 组局照片
 	 */
 	private String titleImage;

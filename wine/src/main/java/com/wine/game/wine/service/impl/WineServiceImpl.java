@@ -1,11 +1,16 @@
 package com.wine.game.wine.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.wine.game.wine.entity.UserEntity;
 import com.wine.game.wine.entity.WineUsersEntity;
 import com.wine.game.wine.service.UserService;
 import com.wine.game.wine.service.WineUsersService;
+import com.wine.game.wine.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -77,6 +82,19 @@ public class WineServiceImpl extends ServiceImpl<WineDao, WineEntity> implements
         }
         byId.setUserEntityList(wineUsersService.getListByUser(wineId));
         return byId;
+    }
+
+    @Override
+    public List<UserVo> getBarById(Integer id) {
+        List<WineEntity> wine_bar_id = this.list(new QueryWrapper<WineEntity>().eq("wine_bar_id", id));
+        List<UserVo> list=new ArrayList<>();
+        wine_bar_id.stream().forEach(m->{
+            UserVo userVo=new UserVo();
+            UserEntity byId = userService.getById(m.getUnId());
+            BeanUtil.copyProperties(byId,userVo);
+            list.add(userVo);
+        });
+        return list;
     }
 
 }

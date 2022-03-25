@@ -12,7 +12,7 @@
     <artifactId>wine</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>wine</name>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>

@@ -16,5 +16,9 @@ import java.util.Map;
 public interface AttentionService extends IService<AttentionEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    AttentionEntity saveAttention(AttentionEntity attention);
+
+
 }
 

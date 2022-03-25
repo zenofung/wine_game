@@ -1,6 +1,7 @@
 package com.wine.game.wine.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,17 @@ public class UserRankingController {
         PageUtils page = userRankingService.queryPage(params);
 
         return R.ok().put("page", page);
+    }
+
+    /**
+     * 排行榜
+     */
+    @RequestMapping("/listRanking/{type}")
+    //@RequiresPermissions("wine:userranking:list")
+    public R listRanking(@PathVariable("type") String type){
+//        PageUtils page = userRankingService.queryPage(params);
+        List<UserRankingEntity> userRankingEntities= userRankingService.getListRanking(type);
+        return R.ok().put("page", userRankingEntities);
     }
 
 

@@ -1,7 +1,10 @@
 package com.wine.game.wine.service.impl;
 
 import com.wine.game.wine.service.UserService;
+import com.zenofung.common.utils.R;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -38,6 +41,16 @@ public class AttentionServiceImpl extends ServiceImpl<AttentionDao, AttentionEnt
            m.setUserEntity(userService.getById(m.getFollowerId()));
         });
         return new PageUtils(page);
+    }
+
+    @Override
+    public AttentionEntity saveAttention(AttentionEntity attention) {
+        List<AttentionEntity> list = this.list(new QueryWrapper<AttentionEntity>().eq("me_id", attention.getMeId())
+                .eq("follower_id", attention.getFollowerId()));
+        if (list.size()>0){
+            return list.get(0);
+        }
+        return null;
     }
 
 }

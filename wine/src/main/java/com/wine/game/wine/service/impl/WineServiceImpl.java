@@ -4,8 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import com.wine.game.wine.entity.UserEntity;
 import com.wine.game.wine.entity.WineUsersEntity;
 import com.wine.game.wine.service.UserService;
+import com.wine.game.wine.service.WineBarService;
 import com.wine.game.wine.service.WineUsersService;
 import com.wine.game.wine.vo.UserVo;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,8 @@ public class WineServiceImpl extends ServiceImpl<WineDao, WineEntity> implements
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private WineBarService wineBarService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -48,7 +52,7 @@ public class WineServiceImpl extends ServiceImpl<WineDao, WineEntity> implements
 
     private void getAllWine(Map<String, Object> params, IPage<WineEntity> page) {
         page.getRecords().stream().forEach(m->{
-            m.setUserEntity(userService.getById(m.getUnId()));
+            m.setUserVo(userService.getByIdUserVo(m.getUnId()));
             m.setUserEntityList(wineUsersService.getListByUser(m.getId()));
             if (!StringUtils.isEmpty(params.get("userId"))){
                 WineUsersEntity wineUsersEntity =new WineUsersEntity();
@@ -56,6 +60,8 @@ public class WineServiceImpl extends ServiceImpl<WineDao, WineEntity> implements
                 wineUsersEntity.setWineId(m.getId());
                 m.setWineUserStatus(wineUsersService.WineUserStatus(wineUsersEntity));
             }
+            m.setWineBarEntity(wineBarService.getById(m.getWineBarId()));
+
         });
     }
 

@@ -95,10 +95,13 @@ public class WineEntity implements Serializable {
 	private Date createTime;
 
 	@TableField(exist = false)
-	private UserEntity userEntity;
+	private UserVo userVo;
 	@TableField(exist = false)
 	private List<UserVo> userEntityList;
 	@TableField(exist = false)
 	private boolean wineUserStatus;
+
+	@TableField(exist = false)
+	private WineBarEntity wineBarEntity;
 
 }

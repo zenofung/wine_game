@@ -1,5 +1,7 @@
 package com.wine.game.wine.service.impl;
 
+import com.wine.game.wine.vo.UserVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -24,6 +26,14 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public UserVo getByIdUserVo(String unId) {
+        UserEntity byId = this.getById(unId);
+        UserVo userVo=new UserVo();
+        BeanUtils.copyProperties(byId,userVo);
+        return userVo;
     }
 
 }

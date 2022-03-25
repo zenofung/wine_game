@@ -1,11 +1,14 @@
 package com.wine.game.wine.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.wine.game.wine.vo.UserVo;
 import lombok.Data;
 
 /**
@@ -45,5 +48,13 @@ public class UserRankingEntity implements Serializable {
 	 * 
 	 */
 	private Date createTime;
+
+	@TableField(exist = false)
+	private UserVo userVo;
+	@TableField(exist = false)
+	private boolean me;
+
+	@TableField(exist = false)
+	private boolean meAttention;
 
 }

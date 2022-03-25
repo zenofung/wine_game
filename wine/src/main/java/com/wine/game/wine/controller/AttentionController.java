@@ -66,8 +66,7 @@ public class AttentionController {
         if (list.size()>0){
             return R.ok().put("attention",list.get(0));
         }
-
-        attentionService.save(attention);
+         attentionService.save(attention);
 
         return R.ok().put("attention",attention);
     }

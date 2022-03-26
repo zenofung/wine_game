@@ -13,12 +13,86 @@
         <result property="peopleAveMoney" column="people_ave_money"/>
         <result property="openingHours" column="opening_hours"/>
         <result property="businessPhone" column="business_phone"/>
+        <result property="barSales" column="bar_sales"/>
         <result property="barLocation" column="bar_location"/>
         <result property="barLocationDetails" column="bar_location_details"/>
         <result property="barLocationLat" column="bar_location_lat"/>
+        <result property="barLocationLong" column="bar_location_long"/>
         <result property="status" column="status"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
+    <select id="selectBarPage" resultType="com.wine.game.wine.entity.WineBarEntity">
+        select w_wine_bar.*,ROUND(
+                    6371.393 * 2 * ASIN(
+                        SQRT(
+                                    POW(
+                                            SIN(
+                                                        (
+                                                            120.219624 * 3.141592653 / 180 - w_wine_bar.bar_location_lat * PI() / 180
+                                                            ) / 2
+                                                ),
+                                            2
+                                        ) + COS(120.219624 * 3.141592653 / 180) * COS(w_wine_bar.bar_location_lat * PI() / 180) * POW(
+                                        SIN(
+                                                    (
+                                                        30.297093 * 3.141592653 / 180 - w_wine_bar.bar_location_long * PI() / 180
+                                                        ) / 2
+                                            ),
+                                        2
+                                    )
+                            )
+                    ) * 1000
+            ) AS distance_um   from w_wine_bar ${ew.customSqlSegment}
+
+    </select>
+    <select id="selectBarPage2" resultType="com.wine.game.wine.entity.WineBarEntity">
+        select w_wine_bar.*,ROUND(
+                    6371.393 * 2 * ASIN(
+                        SQRT(
+                                    POW(
+                                            SIN(
+                                                        (
+                                                            #{userLat} * 3.141592653 / 180 - w_wine_bar.bar_location_lat * PI() / 180
+                                                            ) / 2
+                                                ),
+                                            2
+                                        ) + COS(#{userLat} * 3.141592653 / 180) * COS(w_wine_bar.bar_location_lat * PI() / 180) * POW(
+                                        SIN(
+                                                    (
+                                                            #{userLong} * 3.141592653 / 180 - w_wine_bar.bar_location_long * PI() / 180
+                                                        ) / 2
+                                            ),
+                                        2
+                                    )
+                            )
+                    ) * 1000
+            ) AS distance_um   from w_wine_bar ${ew.customSqlSegment}
+
+    </select>
+    <select id="selectListBar" resultType="com.wine.game.wine.entity.WineBarEntity">
+        select w_wine_bar.*,ROUND(
+                    6371.393 * 2 * ASIN(
+                        SQRT(
+                                    POW(
+                                            SIN(
+                                                        (
+                                                            #{userLat} * 3.141592653 / 180 - w_wine_bar.bar_location_lat * PI() / 180
+                                                            ) / 2
+                                                ),
+                                            2
+                                        ) + COS(#{userLat} * 3.141592653 / 180) * COS(w_wine_bar.bar_location_lat * PI() / 180) * POW(
+                                        SIN(
+                                                    (
+                                                            #{userLong} * 3.141592653 / 180 - w_wine_bar.bar_location_long * PI() / 180
+                                                        ) / 2
+                                            ),
+                                        2
+                                    )
+                            )
+                    ) * 1000
+            ) AS distance_um   from w_wine_bar ${ew.customSqlSegment}
+
+    </select>
 
 
 </mapper>

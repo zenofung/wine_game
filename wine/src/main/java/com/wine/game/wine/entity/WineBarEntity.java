@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class WineBarEntity implements Serializable {
 	 */
 	private String businessPhone;
 
+
 	/**
 	 * 星级
 	 */
@@ -69,11 +71,18 @@ public class WineBarEntity implements Serializable {
 	/**
 	 * 商家经纬度
 	 */
-	private String barLocationLat;
+	private BigDecimal barLocationLat;
+	/**
+	 * 商家经纬度
+	 */
+	private BigDecimal barLocationLong;
+
+
 	/**
 	 * 
 	 */
 	private Integer status;
+	private Integer barSales;
 	/**
 	 * 
 	 */
@@ -84,5 +93,7 @@ public class WineBarEntity implements Serializable {
 
 	@TableField(exist = false)
 	private Boolean wineBarAttention;
+	@TableField(exist = false)
+	private float distanceUm;
 
 }

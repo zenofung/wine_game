@@ -15,11 +15,11 @@ import lombok.Data;
  * 
  * @author zenofung
  * @email zenofung@qq.com
- * @date 2022-03-17 17:20:49
+ * @date 2022-04-03 22:10:27
  */
 @Data
-@TableName("w_wine_users")
-public class WineUsersEntity implements Serializable {
+@TableName("w_wine_users_ready")
+public class WineUsersReadyEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -38,14 +38,22 @@ public class WineUsersEntity implements Serializable {
 	/**
 	 * 
 	 */
+	private Integer flag;
+	/**
+	 * 
+	 */
 	private Integer status;
 	/**
 	 * 
 	 */
 	private Date createTime;
+	/**
+	 * 
+	 */
+	private Date updateTime;
+	@TableField(exist = false)
+	private UserVo userReady;
 
 	@TableField(exist = false)
-	private UserVo userVo;
-
-
+	private boolean meStatus;
 }

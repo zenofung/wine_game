@@ -13,5 +13,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserRankingDao extends BaseMapper<UserRankingEntity> {
-	
+
+    String getMeRanking(String userId);
+
+    String getMeRankingSocial(String userId);
+
 }

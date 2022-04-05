@@ -57,4 +57,8 @@ public class UserRankingEntity implements Serializable {
 	@TableField(exist = false)
 	private boolean meAttention;
 
+	@TableField(exist = false)
+	private String meRankingActive;
+	@TableField(exist = false)
+	private String meRankingSocial;
 }

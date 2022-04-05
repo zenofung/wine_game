@@ -3,6 +3,7 @@ package com.wine.game.wine.service.impl;
 import com.wine.game.wine.entity.AttentionEntity;
 import com.wine.game.wine.service.AttentionService;
 import com.wine.game.wine.service.UserService;
+import com.wine.game.wine.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,8 @@ public class UserRankingServiceImpl extends ServiceImpl<UserRankingDao, UserRank
     private UserService userService;
     @Autowired
     private AttentionService attentionService;
+    @Autowired
+    private UserRankingDao userRankingDao;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         QueryWrapper<UserRankingEntity> userRankingEntityQueryWrapper = new QueryWrapper<>();
@@ -47,6 +50,18 @@ public class UserRankingServiceImpl extends ServiceImpl<UserRankingDao, UserRank
     @Override
     public List<UserRankingEntity> getListRanking(String type) {
         return null;
+    }
+
+    @Override
+    public UserRankingEntity listMeRanking(String userId) {
+        String ranking= userRankingDao.getMeRanking(userId);
+        String rankingSocial= userRankingDao.getMeRankingSocial(userId);
+        UserRankingEntity userRankingEntity = this.list(new QueryWrapper<UserRankingEntity>().eq("user_id", userId)).get(0);
+        userRankingEntity.setMeRankingActive(ranking);
+        userRankingEntity.setMeRankingSocial(rankingSocial);
+        UserVo byIdUserVo = userService.getByIdUserVo(userId);
+        userRankingEntity.setUserVo(byIdUserVo);
+        return userRankingEntity;
     }
 
 }

@@ -1,13 +1,10 @@
 package com.wine.game.wine.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import com.wine.game.wine.vo.UserVo;
 import lombok.Data;
 
 /**
@@ -15,11 +12,11 @@ import lombok.Data;
  * 
  * @author zenofung
  * @email zenofung@qq.com
- * @date 2022-03-17 17:20:49
+ * @date 2022-04-03 20:21:42
  */
 @Data
-@TableName("w_wine_users")
-public class WineUsersEntity implements Serializable {
+@TableName("w_search")
+public class SearchEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -28,13 +25,17 @@ public class WineUsersEntity implements Serializable {
 	@TableId
 	private Integer id;
 	/**
-	 * 
-	 */
-	private String wineId;
-	/**
-	 * 
+	 * 用户id
 	 */
 	private String userId;
+	/**
+	 * 1用户 2酒馆 3关键词 4酒局
+	 */
+	private Integer type;
+	/**
+	 * 显示内容
+	 */
+	private String title;
 	/**
 	 * 
 	 */
@@ -43,9 +44,5 @@ public class WineUsersEntity implements Serializable {
 	 * 
 	 */
 	private Date createTime;
-
-	@TableField(exist = false)
-	private UserVo userVo;
-
 
 }

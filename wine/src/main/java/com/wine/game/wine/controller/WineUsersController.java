@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wine.game.wine.service.UserService;
+import com.wine.game.wine.vo.WineUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,8 +50,9 @@ public class WineUsersController {
      */
     @RequestMapping("/listByWine")
     //@RequiresPermissions("wine:wineusers:list")
-    public R listByWine(@RequestParam(value = "wineId")  String wineId){
-        List<WineUsersEntity> wineId1 = wineUsersService.getListByWine(wineId);
+    public R listByWine(@RequestParam(value = "wineId")  String wineId,
+                        @RequestParam(value = "userId")  String userId){
+        WineUserVo wineId1 = wineUsersService.getListByWine(wineId,userId);
         return R.ok().put("page", wineId1);
     }
 

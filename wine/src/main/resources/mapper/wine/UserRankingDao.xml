@@ -12,6 +12,16 @@
         <result property="updateTime" column="update_time"/>
         <result property="createTime" column="create_time"/>
     </resultMap>
+    <select id="getMeRanking" resultType="java.lang.String">
+        SELECT rowno from
+(select id,user_id,active,(@rowno:=@rowno+1) as rowno from w_user_ranking,(select (@rowno:=0)) b order by active desc) as ranking
+WHERE ranking.user_id=#{userId}
+    </select>
+    <select id="getMeRankingSocial" resultType="java.lang.String">
+        SELECT rowno from
+(select id,user_id,social,(@rowno:=@rowno+1) as rowno from w_user_ranking,(select (@rowno:=0)) b order by social desc) as ranking
+WHERE ranking.user_id=#{userId}
+    </select>
 
 
 </mapper>

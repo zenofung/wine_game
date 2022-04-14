@@ -1,5 +1,6 @@
 server:
-  port: 81
+  port: 82
+
 
 # mysql
 spring:

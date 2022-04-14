@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.wine.game.wine.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +42,16 @@ public class UserRankingController {
 
         return R.ok().put("page", page);
     }
+
+    //获取自己排行
+    @RequestMapping("/listMeRanking")
+    //@RequiresPermissions("wine:userranking:list")
+    public R listMeRanking(@RequestParam(value = "userId") String userId){
+        UserRankingEntity userVo= userRankingService.listMeRanking(userId);
+        return R.ok().put("page", userVo);
+    }
+
+
 
     /**
      * 排行榜

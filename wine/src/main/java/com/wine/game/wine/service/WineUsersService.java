@@ -2,6 +2,7 @@ package com.wine.game.wine.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wine.game.wine.vo.UserVo;
+import com.wine.game.wine.vo.WineUserVo;
 import com.zenofung.common.utils.PageUtils;
 import com.wine.game.wine.entity.WineUsersEntity;
 
@@ -19,7 +20,7 @@ public interface WineUsersService extends IService<WineUsersEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    List<WineUsersEntity> getListByWine(String wineId);
+    WineUserVo getListByWine(String wineId, String userId);
     List<UserVo> getListByUser(String wineId);
 
     boolean WineUserStatus(WineUsersEntity wineUsers);

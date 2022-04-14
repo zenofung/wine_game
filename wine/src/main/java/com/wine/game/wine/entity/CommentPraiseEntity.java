@@ -31,6 +31,7 @@ public class CommentPraiseEntity implements Serializable {
 	/**
 	 * 
 	 */
+	private Integer status;
 	private Integer commentId;
 	/**
 	 * 

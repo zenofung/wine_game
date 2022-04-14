@@ -9,6 +9,7 @@
         <result property="userId" column="user_id"/>
         <result property="comComId" column="com_com_id"/>
         <result property="createTime" column="create_time"/>
+        <result property="status" column="status"/>
     </resultMap>
 
 

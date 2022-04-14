@@ -169,6 +169,51 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
         return articleEntity;
     }
 
+    @Override
+    public CommentEntity getByIdCom(String id, String userId) {
+        CommentEntity byId = commentService.getById(id);
+        //查询二级评价
+        QueryWrapper<ComComEntity> comId = new QueryWrapper<ComComEntity>().eq("com_id", byId.getId());
+        List<ComComEntity> list1 = comComService.list(comId);
+
+        //设置用户信息
+        UserEntity byId1 = userService.getById(byId.getUserId());
+        UserVo userVo2=new UserVo();
+        BeanUtils.copyProperties(byId1,userVo2);
+        byId.setUserVo(userVo2);
+        //查找多级评论
+        list1.stream().forEach(t -> {
+            UserEntity userEntity = userService.getById(t.getUserId());
+            UserVo userVo3=new UserVo();
+            BeanUtils.copyProperties(userEntity,userVo3);
+            t.setUserVo(userVo3);
+            UserEntity byId2 = userService.getById(t.getUserIdTwo());
+            UserVo userVo4=new UserVo();
+            BeanUtils.copyProperties(byId2,userVo4);
+            t.setTwoUserVo(userVo4);
+            QueryWrapper<ComComEntity> comId2 = new QueryWrapper<ComComEntity>().eq("com_id_two", t.getId());
+            List<ComComEntity> list3 = comComService.list(comId2);
+            if (list3.size() > 0) {
+                getListComCom(list3, userId);
+            }
+            t.setComComEntityList(list3);
+            List<ComComPraiseEntity> com_com_id = comComPraiseService.list(new QueryWrapper<ComComPraiseEntity>().eq("com_com_id", t.getId()));
+            t.setPraises(com_com_id.size());
+            List<ComComPraiseEntity> list = comComPraiseService.list(new QueryWrapper<ComComPraiseEntity>().eq("com_com_id", t.getId()).eq("user_id", userId));
+            t.setPraiseStatus(list.size() > 0 ? true : false);
+        });
+        //评论点赞
+
+        List<CommentPraiseEntity> commentPraiseEntities2 = commentPraiseService.list(new QueryWrapper<CommentPraiseEntity>().eq("comment_id",byId.getId()));
+        byId.setPraises(commentPraiseEntities2.size());
+        List<CommentPraiseEntity> commentPraiseEntities3 = commentPraiseService.list(new QueryWrapper<CommentPraiseEntity>().eq("comment_id", byId.getId()).eq("user_id", userId));
+        byId.setPraiseStatus(commentPraiseEntities3.size() > 0 ? true : false);
+        byId.setComComEntityList(list1);
+
+        return byId;
+
+    }
+
     public void getListComCom(List<ComComEntity> comComEntityList, String userId) {
 //       List<ComComEntity> =new ArrayList<>();
 

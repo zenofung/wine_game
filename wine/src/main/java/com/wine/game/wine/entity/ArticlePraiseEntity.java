@@ -32,6 +32,8 @@ public class ArticlePraiseEntity implements Serializable {
 	 * 
 	 */
 	private String articleId;
+
+	private Integer status;
 	/**
 	 * 
 	 */

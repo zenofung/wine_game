@@ -16,20 +16,14 @@ class WineApplicationTests {
     @Autowired
     private RedisTemplate redisTemplate;
 
+
+
     @Autowired
     private WxMaService wxMaService;
 
     @Test
     void contextLoads() {
-        // redisTemplate.opsForValue().set("1","3");
-        try {
-            // String accessToken = wxMaService.getAccessToken();
-            boolean aa = wxMaService.getSecCheckService().checkMessage("特3456书yuuo莞6543李zxcz蒜7782法fgnv级");
-            boolean bb = wxMaService.getSecCheckService().checkMessage("草拟吗");
-            System.out.println("aa---->"+aa+"bb---->"+bb);
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-        }
+
 
     }
 

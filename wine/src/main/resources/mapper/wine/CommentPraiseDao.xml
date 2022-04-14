@@ -8,6 +8,7 @@
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="commentId" column="comment_id"/>
+        <result property="status" column="status"/>
         <result property="createTime" column="create_time"/>
     </resultMap>
 

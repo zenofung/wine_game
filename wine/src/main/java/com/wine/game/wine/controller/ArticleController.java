@@ -3,6 +3,7 @@ package com.wine.game.wine.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.wine.game.wine.entity.CommentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,6 +51,16 @@ public class ArticleController {
     public R info(@PathVariable("id") String id,@PathVariable("userId") String userId){
 		ArticleEntity article = articleService.getByIdAndContent(id,userId);
         return R.ok().put("article", article);
+    }
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/infoCom/{id}/{userId}")
+    //@RequiresPermissions("wine:article:info")
+    public R infoCom(@PathVariable("id") String id,@PathVariable("userId") String userId){
+        CommentEntity article = articleService.getByIdCom(id,userId);
+        return R.ok().put("comment", article);
     }
 
     /**

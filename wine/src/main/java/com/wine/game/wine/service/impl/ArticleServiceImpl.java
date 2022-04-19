@@ -63,7 +63,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, ArticleEntity> i
         if (StringUtils.isEmpty(params.get("attention"))){
             page = this.page(
                     new Query<ArticleEntity>().getPage(params),
-                    new QueryWrapper<ArticleEntity>()
+                    new QueryWrapper<ArticleEntity>().orderByDesc("create_time")
             );
         }else {
            page= articleDao.findByAttentionID(new Query<ArticleEntity>().getPage(params),params.get("user_id").toString());

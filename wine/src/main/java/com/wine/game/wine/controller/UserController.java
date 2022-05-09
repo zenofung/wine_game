@@ -63,12 +63,9 @@ public class UserController {
     //@RequiresPermissions("wine:user:save")
     public R save(@RequestBody UserEntity user){
         // wxMaUserServiceImpl.getUserInfo();
-
 		userService.save(user);
-
         return R.ok().put("user",user);
     }
-
     /**
      * 修改
      */
@@ -76,7 +73,6 @@ public class UserController {
     //@RequiresPermissions("wine:user:update")
     public R update(@RequestBody UserEntity user){
 		userService.updateById(user);
-
         return R.ok();
     }
 
@@ -87,7 +83,6 @@ public class UserController {
     //@RequiresPermissions("${moduleNamez}:user:delete")
     public R delete(@RequestBody String[] ids){
 		userService.removeByIds(Arrays.asList(ids));
-
         return R.ok();
     }
 

@@ -4,6 +4,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.wine.game.wine.config.NettyConfig;
 import com.wine.game.wine.nettywebsocket.NettyServer;
+import com.wine.game.wine.nettywebsocket.common.MessageEnum;
 import com.wine.game.wine.nettywebsocket.entity.MessageEntity;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -29,6 +30,8 @@ import org.springframework.stereotype.Component;
 @ChannelHandler.Sharable
 public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
+
+
     private static final Logger log = LoggerFactory.getLogger(NettyServer.class);
     /**
      * 一旦连接，第一个被执行
@@ -48,15 +51,16 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
 
-        // log.info("服务器收到消息：{}",msg.text());
+        log.info("服务器收到消息：{}",msg.text());
         JSONObject jsonObject = JSONUtil.parseObj(msg.text());
         MessageEntity messageEntity = jsonObject.toBean(MessageEntity.class);
-        if (messageEntity.getStatus().equals("ping")){
+        if (messageEntity.getStatus().equals(MessageEnum.HEARTBEAT.getState())){
             // log.info("心跳：{}",msg.text());
-        }else if (messageEntity.getStatus().equals("login")){
+        }else if (messageEntity.getStatus().equals(MessageEnum.LOGIN.getState())){
+            //TODO 关联channel与用户id， 广播登录状态给好友登录列表，返回好友列表未读信息，
+
             // 获取用户ID
             String uid = jsonObject.getStr("uid");
-
             // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
             AttributeKey<String> key = AttributeKey.valueOf("userId");
             ctx.channel().attr(key).setIfAbsent(uid);
@@ -64,11 +68,20 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
             NettyConfig.getUserChannelMap().put(uid,ctx.channel());
             // 回复消息
             ctx.channel().writeAndFlush(new TextWebSocketFrame("服务器连接成功！"));
-        }else if (messageEntity.getStatus().equals("0")){
-            //判断在线没
-            Channel channel = NettyConfig.getUserChannelMap().get(messageEntity.getHid());
-            channel.writeAndFlush(new TextWebSocketFrame(messageEntity.getContent()));
+        }else if (messageEntity.getStatus().equals(MessageEnum.SENDMESSAGE_SINGLE.getState())){
+            // TODO 单聊 如果聊天用户在线， 如果聊天用户不在线
+            if (NettyConfig.getUserChannelMap().containsKey(messageEntity.getHid())){
+                Channel channel = NettyConfig.getUserChannelMap().get(messageEntity.getHid());
+                channel.writeAndFlush(new TextWebSocketFrame(messageEntity.getContent()));
+            }
+        }else if (messageEntity.getStatus().equals(MessageEnum.SENDMESSAGE_GROUP.getState())){
+            // TODO 群聊
+            if (NettyConfig.getUserChannelMap().containsKey(messageEntity.getHid())){
+                Channel channel = NettyConfig.getUserChannelMap().get(messageEntity.getHid());
+                channel.writeAndFlush(new TextWebSocketFrame(messageEntity.getContent()));
+            }
         }
+
 
 
     }
@@ -76,7 +89,7 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         log.info("handlerRemoved 被调用"+ctx.channel().id().asLongText());
-        // 删除通道
+        // TODO  删除通道   下线通知，广播给好友
         NettyConfig.getChannelGroup().remove(ctx.channel());
         removeUserId(ctx);
     }

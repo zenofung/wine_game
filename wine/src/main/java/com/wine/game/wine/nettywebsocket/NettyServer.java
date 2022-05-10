@@ -1,5 +1,6 @@
 package com.wine.game.wine.nettywebsocket;
 
+import com.wine.game.wine.nettywebsocket.handler.BinaryWebSocketFrameHandler;
 import com.wine.game.wine.nettywebsocket.handler.HeartBeatHandler;
 import com.wine.game.wine.nettywebsocket.handler.WebSocketHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -59,6 +60,9 @@ public class NettyServer {
 
     @Autowired
     private WebSocketHandler webSocketHandler;
+    @Autowired
+    private BinaryWebSocketFrameHandler binaryWebSocketFrameHandler;
+
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workGroup;
@@ -70,7 +74,7 @@ public class NettyServer {
     private void start() throws InterruptedException {
         bossGroup = new NioEventLoopGroup();
         workGroup = new NioEventLoopGroup();
-        // LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
+        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.INFO);
         ServerBootstrap bootstrap = new ServerBootstrap();
         // bossGroup辅助客户端的tcp连接请求, workGroup负责与客户端之前的读写操作
         bootstrap.group(bossGroup,workGroup);
@@ -84,8 +88,7 @@ public class NettyServer {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
 
-                // ch.pipeline().addLast(loggingHandler);
-
+                ch.pipeline().addLast(loggingHandler);
                 // 流水线管理通道中的处理程序（Handler），用来处理业务
                 // webSocket协议本身是基于http协议的，所以这边也要使用http编解码器
                 ch.pipeline().addLast(new HttpServerCodec());
@@ -110,8 +113,10 @@ public class NettyServer {
                 3、核心功能是将http协议升级为ws协议，保持长连接
                 */
                 ch.pipeline().addLast(new WebSocketServerProtocolHandler(webSocketPath, WEBSOCKET_PROTOCOL, true, 65536 * 10));
+                ch.pipeline().addLast(binaryWebSocketFrameHandler);
                 // 自定义的handler，处理业务逻辑
                 ch.pipeline().addLast(webSocketHandler);
+
 
             }
         });

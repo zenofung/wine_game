@@ -2,10 +2,19 @@ package com.wine.game.wine.nettywebsocket.handler;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wine.game.wine.config.NettyConfig;
+import com.wine.game.wine.entity.ImMessageEntity;
+import com.wine.game.wine.entity.ImMessageListEntity;
+import com.wine.game.wine.entity.UserEntity;
+import com.wine.game.wine.entity.WineUsersEntity;
 import com.wine.game.wine.nettywebsocket.NettyServer;
 import com.wine.game.wine.nettywebsocket.common.MessageEnum;
 import com.wine.game.wine.nettywebsocket.entity.MessageEntity;
+import com.wine.game.wine.service.ImMessageListService;
+import com.wine.game.wine.service.ImMessageService;
+import com.wine.game.wine.service.UserService;
+import com.zenofung.common.utils.R;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,7 +23,11 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * @description: 
@@ -30,6 +43,13 @@ import org.springframework.stereotype.Component;
 @ChannelHandler.Sharable
 public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
+
+    @Autowired
+    private ImMessageService imMessageService;
+    @Autowired
+    private ImMessageListService imMessageListService;
+    @Autowired
+    private UserService userService;
 
 
     private static final Logger log = LoggerFactory.getLogger(NettyServer.class);
@@ -58,22 +78,11 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
             // log.info("心跳：{}",msg.text());
         }else if (messageEntity.getStatus().equals(MessageEnum.LOGIN.getState())){
             //TODO 关联channel与用户id， 广播登录状态给好友登录列表，返回好友列表未读信息，
+            this.login(ctx, msg,messageEntity.getContent(),MessageEnum.LOGIN.getState());
 
-            // 获取用户ID
-            String uid = jsonObject.getStr("uid");
-            // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
-            AttributeKey<String> key = AttributeKey.valueOf("userId");
-            ctx.channel().attr(key).setIfAbsent(uid);
-            // 关联channel
-            NettyConfig.getUserChannelMap().put(uid,ctx.channel());
-            // 回复消息
-            ctx.channel().writeAndFlush(new TextWebSocketFrame("服务器连接成功！"));
         }else if (messageEntity.getStatus().equals(MessageEnum.SENDMESSAGE_SINGLE.getState())){
             // TODO 单聊 如果聊天用户在线， 如果聊天用户不在线
-            if (NettyConfig.getUserChannelMap().containsKey(messageEntity.getHid())){
-                Channel channel = NettyConfig.getUserChannelMap().get(messageEntity.getHid());
-                channel.writeAndFlush(new TextWebSocketFrame(messageEntity.getContent()));
-            }
+            this.sendSingle(ctx,messageEntity.getContent());
         }else if (messageEntity.getStatus().equals(MessageEnum.SENDMESSAGE_GROUP.getState())){
             // TODO 群聊
             if (NettyConfig.getUserChannelMap().containsKey(messageEntity.getHid())){
@@ -85,6 +94,22 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
 
 
     }
+
+    private void sendSingle(ChannelHandlerContext ctx, String content) {
+        ImMessageEntity imMessageEntity = JSONUtil.toBean(content, ImMessageEntity.class);
+        if (NettyConfig.getUserChannelMap().containsKey(imMessageEntity.getTargetId())){
+            //在线直接发送并同步数据库
+            Channel channel = NettyConfig.getUserChannelMap().get(imMessageEntity.getTargetId());
+            channel.writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok().put("content",imMessageEntity))));
+            imMessageService.save(imMessageEntity);
+        }else {
+            //不在线同步数据库即可
+            imMessageService.save(imMessageEntity);
+        }
+
+
+    }
+
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
@@ -111,5 +136,37 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
         AttributeKey<String> key = AttributeKey.valueOf("userId");
         String userId = ctx.channel().attr(key).get();
         NettyConfig.getUserChannelMap().remove(userId);
+    }
+
+
+    private void login(ChannelHandlerContext ctx, TextWebSocketFrame msg,String jsonObject,String loginStatus) {
+        // 获取用户ID
+        UserEntity userEntity = JSONUtil.toBean(jsonObject, UserEntity.class);
+        if (!StringUtils.isEmpty(userEntity)){
+            // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
+            AttributeKey<String> key = AttributeKey.valueOf("userId");
+            ctx.channel().attr(key).setIfAbsent(userEntity.getId());
+            // 关联channel
+            NettyConfig.getUserChannelMap().put(userEntity.getId(),ctx.channel());
+            // 回复消息
+            List<ImMessageListEntity> friend = imMessageListService.list(new QueryWrapper<ImMessageListEntity>().eq("friend_id", userEntity.getId()));
+            //更改登录状态
+            UserEntity userEntity1=new UserEntity();
+            userEntity1.setId(userEntity.getId());
+            userEntity1.setLoginStatus(Integer.parseInt(loginStatus));
+            userService.updateById(userEntity1);
+            UserEntity user = userService.getById(userEntity.getId());
+            friend.stream().forEach(m->{
+               if (NettyConfig.getUserChannelMap().containsKey(m.getUserId())){
+                   NettyConfig.getUserChannelMap().get(m.getUserId()).writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok().put("loginUser",user))));
+               }
+            });
+
+
+            ctx.channel().writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok())));
+        }else {
+            ctx.channel().writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.error())));
+        }
+
     }
 }

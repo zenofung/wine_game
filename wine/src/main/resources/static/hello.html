@@ -10,6 +10,11 @@
 <script>
      var interval=self.setInterval("clock()",6000);
     var socket;
+    var user= JSON.stringify({
+          id: "155666",
+         // 连接成功将，用户ID传给服务端
+         content: "sdag"
+     })
     // 判断当前浏览器是否支持webSocket
     if(window.WebSocket){
         socket = new WebSocket("ws://localhost:58080/webSocket")
@@ -25,9 +30,9 @@
             rt.value =  "连接开启了..."
             socket.send(
                 JSON.stringify({
-                    status: "login",
+                    status: 1,
                     // 连接成功将，用户ID传给服务端
-                    uid: "123456"
+                    content: user
                 })
             );
         }

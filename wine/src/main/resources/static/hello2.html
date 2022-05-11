@@ -8,6 +8,11 @@
     <input type="text" id="context">
     <button onclick="send()" >发送</button>
 <script>
+    var user= JSON.stringify({
+        id: "1503003230302347265",
+        // 连接成功将，用户ID传给服务端
+        content: "sdag"
+    })
      var interval=self.setInterval("clock()",6000);
     var socket;
     // 判断当前浏览器是否支持webSocket
@@ -24,9 +29,9 @@
             rt.value =  "连接开启了..."
             socket.send(
                 JSON.stringify({
-                    status: "login",
+                    status: "1",
                     // 连接成功将，用户ID传给服务端
-                    uid: "1234567"
+                    content: user
                 })
             );
         }

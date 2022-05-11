@@ -74,7 +74,7 @@ public class NettyServer {
     private void start() throws InterruptedException {
         bossGroup = new NioEventLoopGroup();
         workGroup = new NioEventLoopGroup();
-        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.INFO);
+        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
         ServerBootstrap bootstrap = new ServerBootstrap();
         // bossGroup辅助客户端的tcp连接请求, workGroup负责与客户端之前的读写操作
         bootstrap.group(bossGroup,workGroup);

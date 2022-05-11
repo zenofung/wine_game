@@ -8,6 +8,7 @@
 
 package com.zenofung.common.utils;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import org.apache.http.HttpStatus;
@@ -83,4 +84,8 @@ public class R<T> extends HashMap<String, Object> {
 		Object data = get("data");
 		return JSON.parseObject(JSON.toJSONString(data), typeReference);
 	}
+
+	public static String getJsonR(R r){
+      return   JSONUtil.parse(r).toString();
+    }
 }

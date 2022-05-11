@@ -9,21 +9,23 @@ package com.wine.game.wine.nettywebsocket.common;
  */
 public enum MessageEnum {
 
-    SENDMESSAGE_GROUP(3,"sendMessage_group"),
-    SENDMESSAGE_SINGLE(2,"sendMessage_single"),
-    HEARTBEAT(0,"heardbeat"),
-    LOGIN(1,"login");
+    QUIT("0","quit"),
+    SENDMESSAGE_GROUP("3","sendMessage_group"),
+    SENDMESSAGE_SINGLE("2","sendMessage_single"),
+    LOGIN("1","login"),
+    HEARTBEAT("0","heardbeat");
 
 
-    private int state;
+
+    private String state;
     private String info;
 
-    private MessageEnum(int state,String info){
+    private MessageEnum(String state,String info){
         this.info=info;
         this.state=state;
     }
 
-    public int getState(){
+    public String getState(){
         return state;
     }
     public String getInfo(){

@@ -59,14 +59,17 @@
 
     function send(){
         var rt = document.getElementById("context").value;
+        var content= JSON.stringify({
+            userId:"155666",
+            targetId:"1503003230302347265",
+            magContent: rt
+        })
         console.log(rt)
          socket.send(
                 JSON.stringify({
                     // 连接成功将，用户ID传给服务端
-                   status: "0",
-                   uid: "123456",
-                   hid: "1234567",
-                   content:rt
+                   status: "2",
+                   content: content
                 })
             );
     }

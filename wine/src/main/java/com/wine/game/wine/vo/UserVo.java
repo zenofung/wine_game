@@ -18,4 +18,5 @@ public class UserVo {
      */
     private String userProtrait;
     private String userSex;
+    private Integer loginStatus;
 }

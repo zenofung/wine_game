@@ -1,5 +1,6 @@
 package com.wine.game.wine.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -16,6 +17,9 @@ import com.wine.game.wine.service.ImMessageService;
 @Service("imMessageService")
 public class ImMessageServiceImpl extends ServiceImpl<ImMessageDao, ImMessageEntity> implements ImMessageService {
 
+    @Autowired
+    private ImMessageDao imMessageDao;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<ImMessageEntity> page = this.page(
@@ -24,6 +28,11 @@ public class ImMessageServiceImpl extends ServiceImpl<ImMessageDao, ImMessageEnt
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public ImMessageEntity getOneByListId(Integer id) {
+       return imMessageDao.getOneByListId(id);
     }
 
 }

@@ -3,6 +3,7 @@ package com.wine.game.wine.dao;
 import com.wine.game.wine.entity.ImMessageEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -13,5 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ImMessageDao extends BaseMapper<ImMessageEntity> {
-	
+
+    ImMessageEntity getOneByListId(@Param("id") Integer id);
 }

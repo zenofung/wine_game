@@ -16,5 +16,8 @@ import java.util.Map;
 public interface ImMessageService extends IService<ImMessageEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    ImMessageEntity getOneByListId(Integer id);
+
 }
 

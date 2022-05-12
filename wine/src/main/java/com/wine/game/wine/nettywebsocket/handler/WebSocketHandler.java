@@ -71,17 +71,16 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
 
-        log.info("服务器收到消息：{}",msg.text());
+        // log.info("服务器收到消息：{}",msg.text());
         JSONObject jsonObject = JSONUtil.parseObj(msg.text());
         MessageEntity messageEntity = jsonObject.toBean(MessageEntity.class);
         if (messageEntity.getStatus().equals(MessageEnum.HEARTBEAT.getState())){
             // log.info("心跳：{}",msg.text());
         }else if (messageEntity.getStatus().equals(MessageEnum.LOGIN.getState())){
-            //TODO 关联channel与用户id， 广播登录状态给好友登录列表，返回好友列表未读信息，
+            // 关联channel与用户id， 广播登录状态给好友登录列表，返回好友列表未读信息，
             this.login(ctx, msg,messageEntity.getContent(),MessageEnum.LOGIN.getState());
-
         }else if (messageEntity.getStatus().equals(MessageEnum.SENDMESSAGE_SINGLE.getState())){
-            // TODO 单聊 如果聊天用户在线， 如果聊天用户不在线
+            //  单聊 如果聊天用户在线， 如果聊天用户不在线
             this.sendSingle(ctx,messageEntity.getContent());
         }else if (messageEntity.getStatus().equals(MessageEnum.SENDMESSAGE_GROUP.getState())){
             // TODO 群聊
@@ -97,13 +96,29 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
 
     private void sendSingle(ChannelHandlerContext ctx, String content) {
         ImMessageEntity imMessageEntity = JSONUtil.toBean(content, ImMessageEntity.class);
+
+        //判断对方是否有好友列表，没有新增， 后面再考虑不接收消息
+        List<ImMessageListEntity> list = imMessageListService.list(new QueryWrapper<ImMessageListEntity>().eq("user_id", imMessageEntity.getUserId()).eq("friend_id", imMessageEntity.getTargetId()));
+        ImMessageListEntity imMessageListEntity;
+        if (list.size()<=0){
+            imMessageListEntity=new ImMessageListEntity();
+            imMessageListEntity.setUserId(imMessageEntity.getTargetId());
+            imMessageListEntity.setFriendId(imMessageEntity.getUserId());
+            imMessageListEntity.setOnLine(1);
+            imMessageListService.save(imMessageListEntity);
+        }else {
+            imMessageListEntity = list.get(0);
+        }
+
         if (NettyConfig.getUserChannelMap().containsKey(imMessageEntity.getTargetId())){
             //在线直接发送并同步数据库
             Channel channel = NettyConfig.getUserChannelMap().get(imMessageEntity.getTargetId());
             channel.writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok().put("content",imMessageEntity))));
+            imMessageEntity.setImMagListId(imMessageListEntity.getId());
             imMessageService.save(imMessageEntity);
         }else {
             //不在线同步数据库即可
+            imMessageEntity.setImMagListId(imMessageListEntity.getId());
             imMessageService.save(imMessageEntity);
         }
 
@@ -158,10 +173,9 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
             UserEntity user = userService.getById(userEntity.getId());
             friend.stream().forEach(m->{
                if (NettyConfig.getUserChannelMap().containsKey(m.getUserId())){
-                   NettyConfig.getUserChannelMap().get(m.getUserId()).writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok().put("loginUser",user))));
+                   NettyConfig.getUserChannelMap().get(m.getUserId()).writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.LOGIN.getState()).put("loginUser",user))));
                }
             });
-
 
             ctx.channel().writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok())));
         }else {

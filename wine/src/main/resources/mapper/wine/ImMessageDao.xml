@@ -16,5 +16,9 @@
         <result property="createTime" column="create_time"/>
     </resultMap>
 
+    <select id="getOneByListId" resultType="com.wine.game.wine.entity.ImMessageEntity">
+        SELECT * from w_im_message WHERE im_mag_list_id=#{id}  ORDER BY create_time desc limit 1
+    </select>
+
 
 </mapper>

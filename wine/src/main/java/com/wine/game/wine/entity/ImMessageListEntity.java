@@ -1,11 +1,14 @@
 package com.wine.game.wine.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.wine.game.wine.vo.UserVo;
 import lombok.Builder;
 import lombok.Data;
 
@@ -54,5 +57,16 @@ public class ImMessageListEntity implements Serializable {
 	 * 
 	 */
 	private Date createTime;
+
+	@TableField(exist = false)
+    private UserVo userVo;
+
+    //未读消息
+    @TableField(exist = false)
+    private Integer unread;
+    //最后一条消息显示
+    @TableField(exist = false)
+    private ImMessageEntity imMessageEntityLast;
+
 
 }

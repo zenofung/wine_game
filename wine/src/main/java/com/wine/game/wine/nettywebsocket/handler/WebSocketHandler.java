@@ -97,31 +97,31 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
     private void sendSingle(ChannelHandlerContext ctx, String content) {
         ImMessageEntity imMessageEntity = JSONUtil.toBean(content, ImMessageEntity.class);
 
-        //判断对方是否有好友列表，没有新增， 后面再考虑不接收消息
-        List<ImMessageListEntity> list = imMessageListService.list(new QueryWrapper<ImMessageListEntity>().eq("user_id", imMessageEntity.getUserId()).eq("friend_id", imMessageEntity.getTargetId()));
+        //判断对方是否有好友列表，没有新增， 后面再考虑不接收消息   判断自己有没有列表
+        List<ImMessageListEntity> list = imMessageListService.list(new QueryWrapper<ImMessageListEntity>().eq("user_id", imMessageEntity.getUserId()).eq("friend_id", imMessageEntity.getTargetId()).or().eq("user_id", imMessageEntity.getTargetId()).eq("friend_id", imMessageEntity.getUserId()));
         ImMessageListEntity imMessageListEntity;
         if (list.size()<=0){
             imMessageListEntity=new ImMessageListEntity();
-            imMessageListEntity.setUserId(imMessageEntity.getTargetId());
-            imMessageListEntity.setFriendId(imMessageEntity.getUserId());
+            imMessageListEntity.setUserId(imMessageEntity.getUserId());
+            imMessageListEntity.setFriendId(imMessageEntity.getTargetId());
             imMessageListEntity.setOnLine(1);
             imMessageListService.save(imMessageListEntity);
         }else {
             imMessageListEntity = list.get(0);
         }
-
         if (NettyConfig.getUserChannelMap().containsKey(imMessageEntity.getTargetId())){
             //在线直接发送并同步数据库
             Channel channel = NettyConfig.getUserChannelMap().get(imMessageEntity.getTargetId());
-            channel.writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok().put("content",imMessageEntity))));
             imMessageEntity.setImMagListId(imMessageListEntity.getId());
             imMessageService.save(imMessageEntity);
+            imMessageEntity.setMessageStatus(1);
+            channel.writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.SENDMESSAGE_SINGLE.getState()).put("content",imMessageEntity))));
         }else {
             //不在线同步数据库即可
             imMessageEntity.setImMagListId(imMessageListEntity.getId());
             imMessageService.save(imMessageEntity);
         }
-
+        ctx.channel().writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.SENDMESSAGE_SINGLE.getState()).put("content",imMessageEntity))));
 
     }
 
@@ -150,6 +150,7 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
     private void removeUserId(ChannelHandlerContext ctx){
         AttributeKey<String> key = AttributeKey.valueOf("userId");
         String userId = ctx.channel().attr(key).get();
+        this.quit(ctx, new TextWebSocketFrame(),"{\"id\":\""+userId+"\",\"content\":\"quit\"}",MessageEnum.QUIT.getState());
         NettyConfig.getUserChannelMap().remove(userId);
     }
 
@@ -175,6 +176,31 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
                if (NettyConfig.getUserChannelMap().containsKey(m.getUserId())){
                    NettyConfig.getUserChannelMap().get(m.getUserId()).writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.LOGIN.getState()).put("loginUser",user))));
                }
+            });
+
+            ctx.channel().writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok())));
+        }else {
+            ctx.channel().writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.error())));
+        }
+
+    }
+    private void quit(ChannelHandlerContext ctx, TextWebSocketFrame msg,String jsonObject,String loginStatus) {
+        // 获取用户ID
+        log.info("服务器收到消息：{}",msg.text());
+        UserEntity userEntity = JSONUtil.toBean(jsonObject, UserEntity.class);
+        if (!StringUtils.isEmpty(userEntity)){
+            // 回复消息
+            List<ImMessageListEntity> friend = imMessageListService.list(new QueryWrapper<ImMessageListEntity>().eq("friend_id", userEntity.getId()));
+            //更改登录状态
+            UserEntity userEntity1=new UserEntity();
+            userEntity1.setId(userEntity.getId());
+            userEntity1.setLoginStatus(Integer.parseInt(loginStatus));
+            userService.updateById(userEntity1);
+            UserEntity user = userService.getById(userEntity.getId());
+            friend.stream().forEach(m->{
+                if (NettyConfig.getUserChannelMap().containsKey(m.getUserId())){
+                    NettyConfig.getUserChannelMap().get(m.getUserId()).writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.LOGIN.getState()).put("loginUser",user))));
+                }
             });
 
             ctx.channel().writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok())));

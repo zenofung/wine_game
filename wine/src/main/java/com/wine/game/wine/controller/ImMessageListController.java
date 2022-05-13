@@ -48,7 +48,7 @@ public class ImMessageListController {
     @RequestMapping("/info/{id}")
     //@RequiresPermissions("wine:immessagelist:info")
     public R info(@PathVariable("id") Integer id){
-		ImMessageListEntity imMessageList = imMessageListService.getById(id);
+		ImMessageListEntity imMessageList = imMessageListService.getByIdAndUserVo(id);
 
         return R.ok().put("imMessageList", imMessageList);
     }

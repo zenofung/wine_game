@@ -1,11 +1,14 @@
 package com.wine.game.wine.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.wine.game.wine.vo.UserVo;
 import lombok.Data;
 
 /**
@@ -29,10 +32,14 @@ public class ImMessageEntity implements Serializable {
 	 * 
 	 */
 	private String userId;
+	@TableField(exist = false)
+    private UserVo userVo;
 	/**
 	 * 
 	 */
 	private String targetId;
+	@TableField(exist = false)
+    private UserVo targetVo;
 	/**
 	 * 消息内容
 	 */
@@ -45,6 +52,8 @@ public class ImMessageEntity implements Serializable {
 	 * 0 未读，1 已读。
 	 */
 	private Integer messageStatus;
+
+    private Integer messageUser;
 	/**
 	 * 
 	 */

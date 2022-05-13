@@ -16,5 +16,10 @@ import java.util.Map;
 public interface ImMessageListService extends IService<ImMessageListEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    String getFriendList(String imList);
+
+
+    ImMessageListEntity getByIdAndUserVo(Integer id);
 }
 

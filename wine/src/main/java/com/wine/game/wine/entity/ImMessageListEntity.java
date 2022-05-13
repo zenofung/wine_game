@@ -61,6 +61,10 @@ public class ImMessageListEntity implements Serializable {
 	@TableField(exist = false)
     private UserVo userVo;
 
+
+    @TableField(exist = false)
+    private UserVo targetVo;
+
     //未读消息
     @TableField(exist = false)
     private Integer unread;

@@ -11,6 +11,8 @@
         <result property="magContent" column="mag_content"/>
         <result property="imMagListId" column="im_mag_list_id"/>
         <result property="messageStatus" column="message_status"/>
+        <result property="messageUser" column="message_user"/>
+
         <result property="status" column="status"/>
         <result property="updateTime" column="update_time"/>
         <result property="createTime" column="create_time"/>

@@ -1,7 +1,9 @@
 package com.wine.game.wine.service.impl;
 
+import com.wine.game.wine.entity.ImMessageListEntity;
 import com.wine.game.wine.service.ImMessageListService;
 import com.wine.game.wine.service.UserService;
+import com.wine.game.wine.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -38,13 +40,27 @@ public class ImMessageServiceImpl extends ServiceImpl<ImMessageDao, ImMessageEnt
                 new Query<ImMessageEntity>().getPage(params),
                 new QueryWrapper<ImMessageEntity>().eq("im_mag_list_id",params.get("imList").toString()).orderByDesc("create_time")
         );
+        if (StringUtils.isEmpty(params.get("userId"))){
+            throw new RuntimeException("id 不存在");
+        }
+        String userId = params.get("userId").toString();
         page.getRecords().stream().forEach(m->{
-            m.setUserVo(userService.getByIdUserVo(m.getUserId()));
-            m.setTargetVo(userService.getByIdUserVo(m.getTargetId()));
+            getUserVo(userId, m);
         });
 
         return new PageUtils(page);
     }
+
+    private void getUserVo(String userId, ImMessageEntity m) {
+        if (m.getUserId().equals(userId)){
+            m.setMessageUser(0);
+            m.setUserVo(userService.getByIdUserVo(m.getUserId()));
+        }else {
+            m.setMessageUser(1);
+            m.setUserVo(userService.getByIdUserVo(m.getUserId()));
+        }
+    }
+
 
     @Override
     public ImMessageEntity getOneByListId(Integer id) {

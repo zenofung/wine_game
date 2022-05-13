@@ -68,6 +68,9 @@ public class ImMessageListEntity implements Serializable {
     //未读消息
     @TableField(exist = false)
     private Integer unread;
+    //未读消息
+    @TableField(exist = false)
+    private String userProtrait;
     //最后一条消息显示
     @TableField(exist = false)
     private ImMessageEntity imMessageEntityLast;

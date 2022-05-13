@@ -40,18 +40,33 @@ public class ImMessageListServiceImpl extends ServiceImpl<ImMessageListDao, ImMe
         );
         page.getRecords().stream().forEach(m->{
             //获取用户头像昵称
-            UserVo byIdUserVo = userService.getByIdUserVo(m.getFriendId());
-            m.setUserVo(byIdUserVo);
-            m.setOnLine(byIdUserVo.getLoginStatus());
+
             //获取好友聊天内容
             ImMessageEntity imMagListId = imMessageService.getOneByListId(m.getId());
             m.setImMessageEntityLast(imMagListId);
+
             List<ImMessageEntity> list = imMessageService.list(new QueryWrapper<ImMessageEntity>().eq("im_mag_list_id", m.getId()).eq("message_status", 0));
             m.setUnread(list.size());
+            String userId = params.get("userId").toString();
+            getUserProt(m, userId);
+
         });
 
         return new PageUtils(page);
     }
+
+    private void getUserProt(ImMessageListEntity m, String userId) {
+        if (m.getUserId().equals(userId)){
+            UserVo byIdUserVo2 = userService.getByIdUserVo(m.getFriendId());
+            m.setOnLine(byIdUserVo2.getLoginStatus());
+            m.setUserVo(byIdUserVo2);
+        }else {
+            UserVo byIdUserVo = userService.getByIdUserVo(m.getUserId());
+            m.setUserVo(byIdUserVo);
+            m.setOnLine(byIdUserVo.getLoginStatus());
+        }
+    }
+
 
     @Override
     public String getFriendList(String imList) {
@@ -63,14 +78,11 @@ public class ImMessageListServiceImpl extends ServiceImpl<ImMessageListDao, ImMe
     @Override
     public ImMessageListEntity getByIdAndUserVo(Integer id) {
         ImMessageListEntity byId = this.getById(id);
-        UserVo byIdUserVo = userService.getByIdUserVo(byId.getUserId());
-        byId.setUserVo(byIdUserVo);
 
-        UserVo byIdUserVo2 = userService.getByIdUserVo(byId.getFriendId());
-        byId.setTargetVo(byIdUserVo2);
         ImMessageEntity imMagListId = imMessageService.getOneByListId(byId.getId());
         byId.setImMessageEntityLast(imMagListId);
         List<ImMessageEntity> list = imMessageService.list(new QueryWrapper<ImMessageEntity>().eq("im_mag_list_id", byId.getId()).eq("message_status", 0));
+        getUserProt(byId,byId.getUserId());
         byId.setUnread(list.size());
         return byId;
 

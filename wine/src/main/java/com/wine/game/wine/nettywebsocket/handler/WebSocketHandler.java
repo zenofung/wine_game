@@ -115,14 +115,13 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
             imMessageEntity.setImMagListId(imMessageListEntity.getId());
             imMessageService.save(imMessageEntity);
             imMessageEntity.setMessageStatus(1);
+            imMessageEntity.setMessageUser(1);
             channel.writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.SENDMESSAGE_SINGLE.getState()).put("content",imMessageEntity))));
         }else {
             //不在线同步数据库即可
             imMessageEntity.setImMagListId(imMessageListEntity.getId());
             imMessageService.save(imMessageEntity);
         }
-        ctx.channel().writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.SENDMESSAGE_SINGLE.getState()).put("content",imMessageEntity))));
-
     }
 
 
@@ -177,6 +176,12 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
                    NettyConfig.getUserChannelMap().get(m.getUserId()).writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.LOGIN.getState()).put("loginUser",user))));
                }
             });
+            List<ImMessageListEntity> friend2 = imMessageListService.list(new QueryWrapper<ImMessageListEntity>().eq("user_id", userEntity.getId()));
+            friend2.stream().forEach(m->{
+                if (NettyConfig.getUserChannelMap().containsKey(m.getFriendId())){
+                    NettyConfig.getUserChannelMap().get(m.getFriendId()).writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.LOGIN.getState()).put("loginUser",user))));
+                }
+            });
 
             ctx.channel().writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok())));
         }else {
@@ -200,6 +205,12 @@ public class WebSocketHandler  extends SimpleChannelInboundHandler<TextWebSocket
             friend.stream().forEach(m->{
                 if (NettyConfig.getUserChannelMap().containsKey(m.getUserId())){
                     NettyConfig.getUserChannelMap().get(m.getUserId()).writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.LOGIN.getState()).put("loginUser",user))));
+                }
+            });
+            List<ImMessageListEntity> friend2 = imMessageListService.list(new QueryWrapper<ImMessageListEntity>().eq("user_id", userEntity.getId()));
+            friend2.stream().forEach(m->{
+                if (NettyConfig.getUserChannelMap().containsKey(m.getFriendId())){
+                    NettyConfig.getUserChannelMap().get(m.getFriendId()).writeAndFlush(new TextWebSocketFrame(R.getJsonR(R.ok(MessageEnum.LOGIN.getState()).put("loginUser",user))));
                 }
             });
 

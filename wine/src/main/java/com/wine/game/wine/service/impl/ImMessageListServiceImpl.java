@@ -66,6 +66,18 @@ public class ImMessageListServiceImpl extends ServiceImpl<ImMessageListDao, ImMe
             m.setOnLine(byIdUserVo.getLoginStatus());
         }
     }
+    private void getUserProt2(ImMessageListEntity m, String userId) {
+        if (m.getUserId().equals(userId)){
+            UserVo byIdUserVo2 = userService.getByIdUserVo(m.getUserId());
+            m.setOnLine(byIdUserVo2.getLoginStatus());
+            m.setUserVo(byIdUserVo2);
+        }else {
+            UserVo byIdUserVo = userService.getByIdUserVo(m.getFriendId());
+            m.setUserVo(byIdUserVo);
+            m.setOnLine(byIdUserVo.getLoginStatus());
+        }
+    }
+
 
 
     @Override
@@ -76,13 +88,12 @@ public class ImMessageListServiceImpl extends ServiceImpl<ImMessageListDao, ImMe
     }
 
     @Override
-    public ImMessageListEntity getByIdAndUserVo(Integer id) {
+    public ImMessageListEntity getByIdAndUserVo(Integer id, String userId) {
         ImMessageListEntity byId = this.getById(id);
-
         ImMessageEntity imMagListId = imMessageService.getOneByListId(byId.getId());
         byId.setImMessageEntityLast(imMagListId);
         List<ImMessageEntity> list = imMessageService.list(new QueryWrapper<ImMessageEntity>().eq("im_mag_list_id", byId.getId()).eq("message_status", 0));
-        getUserProt(byId,byId.getUserId());
+        getUserProt2(byId,userId);
         byId.setUnread(list.size());
         return byId;
 

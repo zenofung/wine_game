@@ -45,7 +45,7 @@ public class ImMessageListServiceImpl extends ServiceImpl<ImMessageListDao, ImMe
             ImMessageEntity imMagListId = imMessageService.getOneByListId(m.getId());
             m.setImMessageEntityLast(imMagListId);
 
-            List<ImMessageEntity> list = imMessageService.list(new QueryWrapper<ImMessageEntity>().eq("im_mag_list_id", m.getId()).eq("message_status", 0));
+            List<ImMessageEntity> list = imMessageService.list(new QueryWrapper<ImMessageEntity>().eq("im_mag_list_id", m.getId()).ne("user_id",params.get("userId")).eq("message_status", 0));
             m.setUnread(list.size());
             String userId = params.get("userId").toString();
             getUserProt(m, userId);

@@ -63,7 +63,7 @@ public class ImMessageServiceImpl extends ServiceImpl<ImMessageDao, ImMessageEnt
 
 
     @Override
-    public ImMessageEntity getOneByListId(Integer id) {
+    public ImMessageEntity getOneByListId(String id) {
        return imMessageDao.getOneByListId(id);
     }
 

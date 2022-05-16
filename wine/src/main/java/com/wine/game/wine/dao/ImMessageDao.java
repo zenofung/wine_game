@@ -15,5 +15,5 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface ImMessageDao extends BaseMapper<ImMessageEntity> {
 
-    ImMessageEntity getOneByListId(@Param("id") Integer id);
+    ImMessageEntity getOneByListId(@Param("id") String id);
 }

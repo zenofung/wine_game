@@ -36,14 +36,19 @@ public class ImMessageListServiceImpl extends ServiceImpl<ImMessageListDao, ImMe
         }
         IPage<ImMessageListEntity> page = this.page(
                 new Query<ImMessageListEntity>().getPage(params),
-                new QueryWrapper<ImMessageListEntity>().eq("user_id",params.get("userId")).or().eq("friend_id",params.get("userId"))
+                new QueryWrapper<ImMessageListEntity>().eq("user_id",params.get("userId")).or().eq("friend_id",params.get("userId")).orderByAsc("create_time")
         );
         page.getRecords().stream().forEach(m->{
             //获取用户头像昵称
 
             //获取好友聊天内容
             ImMessageEntity imMagListId = imMessageService.getOneByListId(m.getId());
-            m.setImMessageEntityLast(imMagListId);
+            if (StringUtils.isEmpty(imMagListId)){
+                ImMessageEntity imMessageEntity=new ImMessageEntity();
+                m.setImMessageEntityLast(imMessageEntity);
+            }else {
+                m.setImMessageEntityLast(imMagListId);
+            }
 
             List<ImMessageEntity> list = imMessageService.list(new QueryWrapper<ImMessageEntity>().eq("im_mag_list_id", m.getId()).ne("user_id",params.get("userId")).eq("message_status", 0));
             m.setUnread(list.size());
@@ -88,7 +93,7 @@ public class ImMessageListServiceImpl extends ServiceImpl<ImMessageListDao, ImMe
     }
 
     @Override
-    public ImMessageListEntity getByIdAndUserVo(Integer id, String userId) {
+    public ImMessageListEntity getByIdAndUserVo(String id, String userId) {
         ImMessageListEntity byId = this.getById(id);
         ImMessageEntity imMagListId = imMessageService.getOneByListId(byId.getId());
         byId.setImMessageEntityLast(imMagListId);

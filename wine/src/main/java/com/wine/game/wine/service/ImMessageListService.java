@@ -20,6 +20,6 @@ public interface ImMessageListService extends IService<ImMessageListEntity> {
     String getFriendList(String imList);
 
 
-    ImMessageListEntity getByIdAndUserVo(Integer id, String userId);
+    ImMessageListEntity getByIdAndUserVo(String id, String userId);
 }
 

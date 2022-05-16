@@ -47,7 +47,7 @@ public class ImMessageEntity implements Serializable {
 	/**
 	 * 消息队列id
 	 */
-	private Integer imMagListId;
+	private String imMagListId;
 	/**
 	 * 0 未读，1 已读。
 	 */

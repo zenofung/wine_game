@@ -6,6 +6,8 @@ import com.wine.game.wine.service.UserService;
 import com.wine.game.wine.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -47,7 +49,11 @@ public class ImMessageServiceImpl extends ServiceImpl<ImMessageDao, ImMessageEnt
         page.getRecords().stream().forEach(m->{
             getUserVo(userId, m);
         });
-
+        //把未读信息变成已读
+        QueryWrapper<ImMessageEntity> eq = new QueryWrapper<ImMessageEntity>().eq("im_mag_list_id", params.get("imList").toString()).eq("target_id", userId);
+        ImMessageEntity imMessageEntity=new ImMessageEntity();
+        imMessageEntity.setMessageStatus(1);
+        this.update(imMessageEntity,eq);
         return new PageUtils(page);
     }
 
@@ -66,5 +72,14 @@ public class ImMessageServiceImpl extends ServiceImpl<ImMessageDao, ImMessageEnt
     public ImMessageEntity getOneByListId(String id) {
        return imMessageDao.getOneByListId(id);
     }
+
+    @Override
+    public void updateMessageStatus(String userId, String msgList) {
+        QueryWrapper<ImMessageEntity> eq = new QueryWrapper<ImMessageEntity>().eq("im_mag_list_id", msgList).eq("target_id", userId);
+        ImMessageEntity imMessageEntity=new ImMessageEntity();
+        imMessageEntity.setMessageStatus(1);
+        this.update(imMessageEntity,eq);
+    }
+
 
 }

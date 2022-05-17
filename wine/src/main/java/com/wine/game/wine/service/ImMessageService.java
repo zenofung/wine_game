@@ -19,5 +19,7 @@ public interface ImMessageService extends IService<ImMessageEntity> {
 
     ImMessageEntity getOneByListId(String id);
 
+
+    void updateMessageStatus(String userId, String msgList);
 }
 

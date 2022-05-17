@@ -3,6 +3,7 @@ package com.wine.game.wine.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,10 +68,13 @@ public class ImMessageController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping("/updateMessageStatus")
     //@RequiresPermissions("wine:immessage:update")
-    public R update(@RequestBody ImMessageEntity imMessage){
-		imMessageService.updateById(imMessage);
+    public R updateMessageStatus(String userId,String msgList){
+        if (StringUtils.isEmpty(userId)||StringUtils.isEmpty(msgList)){
+            throw new RuntimeException("");
+        }
+		imMessageService.updateMessageStatus(userId,msgList);
 
         return R.ok();
     }

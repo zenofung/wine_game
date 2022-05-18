@@ -14,6 +14,7 @@
         <result property="userPhone" column="user_phone"/>
         <result property="userAddress" column="user_address"/>
         <result property="lastIp" column="last_ip"/>
+        <result property="tourist" column="tourist"/>
         <result property="loginStatus" column="login_status"/>
         <result property="status" column="status"/>
         <result property="userLat" column="user_lat"/>

@@ -16,6 +16,7 @@ import com.wine.game.wine.service.UserService;
 import com.zenofung.common.utils.PageUtils;
 import com.zenofung.common.utils.R;
 
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -61,10 +62,10 @@ public class UserController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("wine:user:save")
-    public R save(@RequestBody UserEntity user){
+    public R save(@RequestBody UserEntity user,HttpServletRequest httpServletRequest){
         // wxMaUserServiceImpl.getUserInfo();
-		userService.save(user);
-        return R.ok().put("user",user);
+        UserEntity userEntity = userService.  saveUser(user, httpServletRequest );
+        return R.ok().put("user",userEntity);
     }
     /**
      * 修改

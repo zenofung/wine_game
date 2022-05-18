@@ -62,6 +62,11 @@ public class UserEntity implements Serializable {
      *
      */
     private Integer loginStatus;
+
+    /**
+     *
+     */
+    private Integer tourist;
 	/**
 	 * 
 	 */

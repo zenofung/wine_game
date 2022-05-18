@@ -34,6 +34,13 @@ spring:
       oss:
         endpoint: oss-cn-beijing.aliyuncs.com
         bucket: www-fpcs-top
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌秘钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
 
 glmall:
   thread:

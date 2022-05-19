@@ -42,11 +42,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (org.springframework.util.StringUtils.isEmpty(user.getTourist())) {
             authorities.add(new SimpleGrantedAuthority(user.getTourist().toString()));
         }
-        // return createLoginUser(user);
-        return new User(user.getUserPhone(), user.getOpenId(),authorities );
+        LoginUser loginUser = new LoginUser(user);
+        return loginUser;
     }
 
-    public UserDetails createLoginUser(UserEntity user) {
-        return new LoginUser(user, permissionService.getMenuPermission(user));
-    }
+    // public UserDetails createLoginUser(UserEntity user) {
+    //     return new LoginUser(user, permissionService.getMenuPermission(user));
+    // }
 }

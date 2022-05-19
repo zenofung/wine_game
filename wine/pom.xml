@@ -16,6 +16,7 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
+        <fastjson.version>1.2.70</fastjson.version>
     </properties>
     <dependencies>
         <dependency>
@@ -32,7 +33,12 @@
             <artifactId>netty-all</artifactId>
             <version>4.1.33.Final</version>
         </dependency>
-
+        <!-- 阿里JSON解析器 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

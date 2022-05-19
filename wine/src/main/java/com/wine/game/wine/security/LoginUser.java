@@ -3,7 +3,9 @@ package com.wine.game.wine.security;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wine.game.wine.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
 import java.util.Set;
@@ -15,13 +17,11 @@ import java.util.Set;
  */
 public class LoginUser implements UserDetails
 {
-    private static final long serialVersionUID = 1L;
-
     /**
      * 用户唯一标识
      */
     private String token;
-
+    private String userId;
     /**
      * 登陆时间
      */
@@ -32,198 +32,129 @@ public class LoginUser implements UserDetails
      */
     private Long expireTime;
 
-    /**
-     * 登录IP地址
-     */
-    private String ipaddr;
+    public String getUserId() {
+        return userId;
+    }
 
-    /**
-     * 登录地点
-     */
-    private String loginLocation;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-    /**
-     * 浏览器类型
-     */
-    private String browser;
+    public String getToken() {
+        return token;
+    }
 
-    /**
-     * 操作系统
-     */
-    private String os;
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Long getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Long loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    public Long getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Long expireTime) {
+        this.expireTime = expireTime;
+    }
+
+    private UserEntity userEntity;
 
     /**
      * 权限列表
      */
-    private Set<String> permissions;
+    private String permissions;
 
-    /**
-     * 用户信息
-     */
-    private UserEntity user;
-
-    public String getToken()
-    {
-        return token;
-    }
-
-    public void setToken(String token)
-    {
-        this.token = token;
-    }
-
-    public LoginUser()
-    {
-    }
-
-    public LoginUser(UserEntity user, Set<String> permissions)
-    {
-        this.user = user;
-        this.permissions = permissions;
-    }
-
-    @JsonIgnore
-    @Override
-    public String getPassword()
-    {
-        return user.getOpenId();
-    }
-
-    @Override
-    public String getUsername()
-    {
-        return user.getUserPhone();
-    }
-
-    /**
-     * 账户是否未过期,过期无法验证
-     */
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonExpired()
-    {
-        return true;
-    }
-
-    /**
-     * 指定用户是否解锁,锁定的用户无法进行身份验证
-     * 
-     * @return
-     */
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonLocked()
-    {
-        return true;
-    }
-
-    /**
-     * 指示是否已过期的用户的凭据(密码),过期的凭据防止认证
-     * 
-     * @return
-     */
-    @JsonIgnore
-    @Override
-    public boolean isCredentialsNonExpired()
-    {
-        return true;
-    }
-
-    /**
-     * 是否可用 ,禁用的用户不能身份验证
-     * 
-     * @return
-     */
-    @JsonIgnore
-    @Override
-    public boolean isEnabled()
-    {
-        return true;
-    }
-
-    public Long getLoginTime()
-    {
-        return loginTime;
-    }
-
-    public void setLoginTime(Long loginTime)
-    {
-        this.loginTime = loginTime;
-    }
-
-    public String getIpaddr()
-    {
-        return ipaddr;
-    }
-
-    public void setIpaddr(String ipaddr)
-    {
-        this.ipaddr = ipaddr;
-    }
-
-    public String getLoginLocation()
-    {
-        return loginLocation;
-    }
-
-    public void setLoginLocation(String loginLocation)
-    {
-        this.loginLocation = loginLocation;
-    }
-
-    public String getBrowser()
-    {
-        return browser;
-    }
-
-    public void setBrowser(String browser)
-    {
-        this.browser = browser;
-    }
-
-    public String getOs()
-    {
-        return os;
-    }
-
-    public void setOs(String os)
-    {
-        this.os = os;
-    }
-
-    public Long getExpireTime()
-    {
-        return expireTime;
-    }
-
-    public void setExpireTime(Long expireTime)
-    {
-        this.expireTime = expireTime;
-    }
-
-    public Set<String> getPermissions()
-    {
+    public String getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Set<String> permissions)
-    {
+    public void setPermissions(String permissions) {
         this.permissions = permissions;
     }
 
-    public UserEntity getUser()
-    {
-        return user;
+    public LoginUser(UserEntity userEntity) {
+        this.userEntity=userEntity;
     }
-
-    public void setUser(UserEntity user)
-    {
-        this.user = user;
-    }
-
+    /**
+     * Returns the authorities granted to the user. Cannot return <code>null</code>.
+     *
+     * @return the authorities, sorted by natural key (never <code>null</code>)
+     */
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities()
-    {
-        return null;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.createAuthorityList(userEntity.getTourist()+"");
+    }
+
+    /**
+     * Returns the password used to authenticate the user.
+     *
+     * @return the password
+     */
+    @Override
+    public String getPassword() {
+        return new BCryptPasswordEncoder().encode(userEntity.getOpenId());
+    }
+
+    /**
+     * Returns the username used to authenticate the user. Cannot return <code>null</code>.
+     *
+     * @return the username (never <code>null</code>)
+     */
+    @Override
+    public String getUsername() {
+        return userEntity.getUserName();
+    }
+
+    /**
+     * Indicates whether the user's account has expired. An expired account cannot be
+     * authenticated.
+     *
+     * @return <code>true</code> if the user's account is valid (ie non-expired),
+     * <code>false</code> if no longer valid (ie expired)
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    /**
+     * Indicates whether the user is locked or unlocked. A locked user cannot be
+     * authenticated.
+     *
+     * @return <code>true</code> if the user is not locked, <code>false</code> otherwise
+     */
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    /**
+     * Indicates whether the user's credentials (password) has expired. Expired
+     * credentials prevent authentication.
+     *
+     * @return <code>true</code> if the user's credentials are valid (ie non-expired),
+     * <code>false</code> if no longer valid (ie expired)
+     */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    /**
+     * Indicates whether the user is enabled or disabled. A disabled user cannot be
+     * authenticated.
+     *
+     * @return <code>true</code> if the user is enabled, <code>false</code> otherwise
+     */
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

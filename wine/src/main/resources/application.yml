@@ -36,7 +36,7 @@ spring:
         bucket: www-fpcs-top
 token:
   # 令牌自定义标识
-  header: Authorization
+  header: authorization
   # 令牌秘钥
   secret: abcdefghijklmnopqrstuvwxyz
   # 令牌有效期（默认30分钟）

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @description: 
@@ -19,12 +21,14 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @create: 2022-05-18 14:46
  */
-@Controller
+@RestController
+@RequestMapping("wine/")
 public class LoginController {
 
     @Autowired
     private SysLoginService sysLoginService;
-    @PostMapping("/login")
+
+    @PostMapping("login")
     public R login(@RequestBody UserEntity userEntity)
     {
         // 生成令牌

@@ -8,6 +8,7 @@ import com.wine.game.wine.security.LoginUser;
 import com.wine.game.wine.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -42,7 +43,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (org.springframework.util.StringUtils.isEmpty(user.getTourist())) {
             authorities.add(new SimpleGrantedAuthority(user.getTourist().toString()));
         }
-        LoginUser loginUser = new LoginUser(user);
+
+        LoginUser loginUser = new LoginUser();
+        BeanUtils.copyProperties(user,loginUser);
         return loginUser;
     }
 

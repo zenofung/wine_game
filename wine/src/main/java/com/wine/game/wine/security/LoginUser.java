@@ -1,7 +1,9 @@
 package com.wine.game.wine.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wine.game.wine.entity.UserEntity;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,73 +17,24 @@ import java.util.Set;
  * 
  * @author ruoyi
  */
+@Data
 public class LoginUser implements UserDetails
 {
-    /**
-     * 用户唯一标识
-     */
+
+
+    private String id;
+    private String userNikename;
+    private String userProtrait;
+    private String userPhone;
+    private String openId;
     private String token;
-    private String userId;
-    /**
-     * 登陆时间
-     */
-    private Long loginTime;
-
-    /**
-     * 过期时间
-     */
     private Long expireTime;
+    private Long loginTime;
+    private Integer tourist;
 
-    public String getUserId() {
-        return userId;
+    public LoginUser() {
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Long getLoginTime() {
-        return loginTime;
-    }
-
-    public void setLoginTime(Long loginTime) {
-        this.loginTime = loginTime;
-    }
-
-    public Long getExpireTime() {
-        return expireTime;
-    }
-
-    public void setExpireTime(Long expireTime) {
-        this.expireTime = expireTime;
-    }
-
-    private UserEntity userEntity;
-
-    /**
-     * 权限列表
-     */
-    private String permissions;
-
-    public String getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(String permissions) {
-        this.permissions = permissions;
-    }
-
-    public LoginUser(UserEntity userEntity) {
-        this.userEntity=userEntity;
-    }
     /**
      * Returns the authorities granted to the user. Cannot return <code>null</code>.
      *
@@ -89,7 +42,7 @@ public class LoginUser implements UserDetails
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList(userEntity.getTourist()+"");
+        return AuthorityUtils.commaSeparatedStringToAuthorityList("0,1");
     }
 
     /**
@@ -99,7 +52,7 @@ public class LoginUser implements UserDetails
      */
     @Override
     public String getPassword() {
-        return new BCryptPasswordEncoder().encode(userEntity.getOpenId());
+        return new BCryptPasswordEncoder().encode(this.openId);
     }
 
     /**
@@ -109,7 +62,7 @@ public class LoginUser implements UserDetails
      */
     @Override
     public String getUsername() {
-        return userEntity.getUserName();
+        return this.userPhone;
     }
 
     /**

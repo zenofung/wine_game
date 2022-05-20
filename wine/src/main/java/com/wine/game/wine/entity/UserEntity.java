@@ -79,7 +79,11 @@ public class UserEntity implements Serializable {
 	 * 
 	 */
 	private Date updateTime;
-	/**
+
+    public UserEntity() {
+    }
+
+    /**
 	 * 
 	 */
 	private Date createTime;

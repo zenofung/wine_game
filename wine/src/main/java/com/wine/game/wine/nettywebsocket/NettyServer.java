@@ -16,6 +16,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
 import java.net.InetSocketAddress;
 
 /**
@@ -95,13 +98,14 @@ public class NettyServer {
                 ch.pipeline().addLast(new ObjectEncoder());
                 // 以块的方式来写的处理器
                 ch.pipeline().addLast(new ChunkedWriteHandler());
+
+
                 /*
                 说明：
                 1、http数据在传输过程中是分段的，HttpObjectAggregator可以将多个段聚合
                 2、这就是为什么，当浏览器发送大量数据时，就会发送多次http请求
                  */
                 ch.pipeline().addLast(new HttpObjectAggregator(8192));
-
                 //针对客户端，若10s内无读事件则触发心跳处理方法HeartBeatHandler#userEventTriggered
                 ch.pipeline().addLast(new IdleStateHandler(10 , 0 , 0));
                 //自定义空闲状态检测(自定义心跳检测handler)

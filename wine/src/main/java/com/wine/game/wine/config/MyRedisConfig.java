@@ -3,7 +3,9 @@ package com.wine.game.wine.config;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wine.game.wine.security.listen.ReidsListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -50,14 +52,14 @@ public class MyRedisConfig extends CachingConfigurerSupport
 {
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
+
     @Bean
     @SuppressWarnings(value = { "unchecked", "rawtypes" })
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory)
     {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-        ParserConfig.getGlobalInstance().addAccept("com.wine.game.wine.security.LoginUser");
-        ParserConfig.getGlobalInstance().addAccept("org.springframework.security.core.authority.SimpleGrantedAuthority");
+
         FastJson2JsonRedisSerializer serializer = new FastJson2JsonRedisSerializer(Object.class);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -78,5 +80,10 @@ public class MyRedisConfig extends CachingConfigurerSupport
         return redisMessageListenerContainer;
     }
 
+
+    @Bean
+    public ReidsListener codeExpiredListener() {
+        return new ReidsListener(this.redisMessageListenerContainer());
+    }
 
 }

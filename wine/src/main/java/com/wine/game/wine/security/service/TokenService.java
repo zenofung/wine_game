@@ -1,6 +1,7 @@
 package com.wine.game.wine.security.service;
 
 import cn.hutool.http.useragent.UserAgent;
+import com.alibaba.fastjson.JSON;
 import com.wine.game.wine.common.Constants;
 import com.wine.game.wine.common.IdUtils;
 import com.wine.game.wine.common.ServletUtils;
@@ -63,7 +64,7 @@ public class TokenService
             // 解析对应的权限以及用户信息
             String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
             String userKey = getTokenKey(uuid);
-            LoginUser user = redisCache.getCacheObject(userKey);
+            LoginUser user = redisCache.getCacheObject(userKey) ;
             return user;
         }
         return null;
@@ -153,7 +154,7 @@ public class TokenService
     //     loginUser.setBrowser(userAgent.getBrowser().getName());
     //     loginUser.setOs(userAgent.getOperatingSystem().getName());
     // }
-    
+    //
     /**
      * 从数据声明生成令牌
      *

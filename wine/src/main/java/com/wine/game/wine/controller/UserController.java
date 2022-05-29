@@ -84,7 +84,7 @@ public class UserController {
     //@RequiresPermissions("${moduleNamez}:user:delete")
     public R delete(@RequestBody String[] ids){
 		userService.removeByIds(Arrays.asList(ids));
-        return R.ok();
+         return R.ok();
     }
 
 }

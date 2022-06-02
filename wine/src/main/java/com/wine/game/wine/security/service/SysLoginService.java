@@ -51,9 +51,11 @@ public class SysLoginService
         {
             if (e instanceof BadCredentialsException)
             {
+                throw new RuntimeException("密码错误");
             }
             else
             {
+                throw new RuntimeException("账号未注册");
             }
         }
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();

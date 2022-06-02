@@ -38,7 +38,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userService.list(new QueryWrapper<UserEntity>().eq("user_phone", username)).get(0);
+        List<UserEntity> user_phone = userService.list(new QueryWrapper<UserEntity>().eq("user_phone", username));
+        if (user_phone.size()==0)
+        {
+            log.info("登录用户：{} 不存在.", username);
+            throw new RuntimeException("登录用户：" + username + " 不存在");
+        }
+        UserEntity user = user_phone.get(0);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         if (org.springframework.util.StringUtils.isEmpty(user.getTourist())) {
             authorities.add(new SimpleGrantedAuthority(user.getTourist().toString()));

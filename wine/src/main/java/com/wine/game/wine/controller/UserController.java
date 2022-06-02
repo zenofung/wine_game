@@ -1,9 +1,12 @@
 package com.wine.game.wine.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.wine.game.wine.common.LogInEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,7 +67,12 @@ public class UserController {
     //@RequiresPermissions("wine:user:save")
     public R save(@RequestBody UserEntity user,HttpServletRequest httpServletRequest){
         // wxMaUserServiceImpl.getUserInfo();
-        UserEntity userEntity = userService.  saveUser(user, httpServletRequest );
+        List<UserEntity> userPhone = userService.list(new QueryWrapper<UserEntity>().eq("user_phone", user.getUserPhone()));
+        if (userPhone.size()>0){
+            return R.ok().put("status", LogInEnum.REPETITION.getState());
+        }
+
+        UserEntity userEntity = userService.saveUser(user, httpServletRequest );
         return R.ok().put("user",userEntity);
     }
     /**

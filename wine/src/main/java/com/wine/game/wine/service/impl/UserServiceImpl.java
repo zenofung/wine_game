@@ -49,10 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
 
     @Override
     public UserEntity saveUser(UserEntity user, HttpServletRequest httpServletRequest) {
-        List<UserEntity> user_phone = this.list(new QueryWrapper<UserEntity>().eq("user_phone", user.getUserPhone()));
-        if (user_phone.size()>0){
-            return user_phone.get(0);
-        }
+
         if (StringUtils.isEmpty(user.getUserNikename())){
             String randomJianHan = RandomName.getRandomJianHan(2);
             user.setUserNikename(randomJianHan);

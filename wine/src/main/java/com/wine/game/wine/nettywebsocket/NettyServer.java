@@ -98,8 +98,6 @@ public class NettyServer {
                 ch.pipeline().addLast(new ObjectEncoder());
                 // 以块的方式来写的处理器
                 ch.pipeline().addLast(new ChunkedWriteHandler());
-
-
                 /*
                 说明：
                 1、http数据在传输过程中是分段的，HttpObjectAggregator可以将多个段聚合
@@ -120,8 +118,6 @@ public class NettyServer {
                 ch.pipeline().addLast(binaryWebSocketFrameHandler);
                 // 自定义的handler，处理业务逻辑
                 ch.pipeline().addLast(webSocketHandler);
-
-
             }
         });
         // 配置完成，开始绑定server，通过调用sync同步方法阻塞直到绑定成功
@@ -156,7 +152,5 @@ public class NettyServer {
         }).start();
 
     }
-
-
     
 }

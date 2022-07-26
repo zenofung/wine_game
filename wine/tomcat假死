@@ -1,0 +1,47 @@
+
+
+命令： tail -100f localhost_access_log
+
+通过下面的命令查看实时的日志，执行完下面的查看日志的命令后，而后再次申请下程序，在日志中并没有发现申请记录，阐明tomcat处于一种假死状态，上面接着排查。
+
+
+
+
+网络查看
+CLOSE_WAIT过多情况
+netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+
+netstat -an | grep "CLOSE_WAIT"
+
+ss -ant
+
+
+gc 情况查看
+jstat -gcutil 【pid】 1000
+
+
+gc 内存情况
+jmap -heap 进程ID
+jmap -histo 进程ID
+
+
+
+①、应用 jstack 命令导出以后JVM的线程dump快照，而后看看dump中线程都在干什么？
+命令：jstack pid >> jvmThreadDump.log
+
+count=`cat jstack1.log | grep java.lang.Thread.State | wc -l`; wait=`cat jstack1.log | grep WAITING | wc -l`; a=`echo | awk "{print $wait/$count*100}"`; echo "$a%"
+
+
+
+
+一般针对内存泄露，除了开发代码的时候，就进行规范之后，等运行之后，要查看该问题，特别是线上环境的话，最好将完整的JVM堆栈信息给dump下来。这个时候可以使用以下命令：
+
+jmap -dump:file=heap-dump.bin 24118
+
+ 指定为二进制文件
+jmap -dump:format=b,file=heap-dump.bin <14365>
+
+
+
+ tar -czvf li.zip.tar  li
+ tar -cvf archive_name.tar directory_to_compress  

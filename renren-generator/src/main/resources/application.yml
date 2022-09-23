@@ -8,9 +8,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     #MySQL配置
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://121.40.90.22:3306/wine?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://39.104.94.12:3306/yami_shops?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: root
+    password: QSZ2022
 
 
   jackson:

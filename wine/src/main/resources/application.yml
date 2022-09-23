@@ -1,6 +1,12 @@
 #ipAddr: 127.0.0.1
 server:
   port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 400 #最大工作线程数量
+    min-spare-threads: 20 #最小工作线程数量
+    #max-connections: 10000 #一瞬间最大支持的并发的连接数
+    accept-count: 200 #等待队列长度
 spring:
 #    sentinel:
 #      transport:
@@ -9,7 +15,7 @@ spring:
     name: wine
   datasource:
     username: root
-    password: root
+    password: 604772046
     url: jdbc:mysql://121.40.90.22:3306/wine?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
